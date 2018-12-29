@@ -1,21 +1,44 @@
 package com.example.dantczak.got;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 
 public class LeaderMainActivity extends AppCompatActivity {
+    private AlertDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupView();
         setupButtonListeners();
+        setupDialog();
+    }
+
+    private void setupDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MyDialogTheme);
+
+        builder.setMessage("Brak oczekujących zgłoszeń, do których rozpatrywania masz uprawnienia.")
+                .setTitle("Brak zgłoszeń")
+                .setNeutralButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog = builder.create();
     }
 
     private void setupView() {
@@ -29,11 +52,25 @@ public class LeaderMainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), VerificationActivity.class);
-                startActivity(intent);
+                if(isEntryWaiting())
+                {
+                    Intent intent = new Intent(getApplicationContext(), VerificationActivity.class);
+                    startActivity(intent);
+                }
+                else
+                {
+                    dialog.show();
+                }
             }
         });
     }
+
+    private boolean isEntryWaiting()
+    {
+        return true;
+    }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
