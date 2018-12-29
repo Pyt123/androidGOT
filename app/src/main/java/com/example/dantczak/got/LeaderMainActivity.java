@@ -4,12 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity {
+public class LeaderMainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,26 +19,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupView() {
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        setContentView(R.layout.activity_leader_main);
+        Toolbar toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
 
     private void setupButtonListeners() {
-        Button button = findViewById(R.id.ranking_button);
+        Button button = findViewById(R.id.zweryfikuj_trase_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), RankingActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        button = findViewById(R.id.uloz_wedrowke_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), SetupWalkActivity.class);
+                Intent intent = new Intent(getApplicationContext(), VerificationActivity.class);
                 startActivity(intent);
             }
         });
@@ -60,8 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.leader_panel_action) {
-            Intent intent = new Intent(this, LeaderMainActivity.class);
-            startActivity(intent);
+            finish();
             return true;
         }
 

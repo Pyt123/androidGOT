@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">GOT</string>
-    <string name="action_settings">Settings</string>
+    <string name="change_panel">Zmień panel</string>
+    <string name="title_activity_ranking">Ranking</string>
+    <string name="title_activity_main">Mobilna GOT</string>
+    <string name="title_activity_setup_walk">Wybierz rodziaj trasy</string>
+    <string name="title_activity_leader_main">Mobilna GOT</string>
+    <string name="title_activity_verification">Rozpatrywanie zgłoszenia</string>
+    <string name="title_activity_mountain_group">Filtrowanie grup górskich</string>
+    <string name="title_activity_date_frame">Ustawianie przedziału dat</string>
 </resources>
