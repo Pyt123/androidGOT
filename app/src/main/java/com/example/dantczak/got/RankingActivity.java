@@ -1,8 +1,10 @@
 package com.example.dantczak.got;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 public class RankingActivity extends AppCompatActivity {
 
@@ -10,6 +12,7 @@ public class RankingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupView();
+        setupButtonListeners();
     }
 
     private void setupView() {
@@ -19,4 +22,24 @@ public class RankingActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    private void setupButtonListeners()
+    {
+        View view = findViewById(R.id.grupy_button);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MountainGroupActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        view = findViewById(R.id.daty_button);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), DateFrameActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
 }
