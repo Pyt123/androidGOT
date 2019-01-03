@@ -1,4 +1,4 @@
-package com.example.dantczak.got;
+package com.example.dantczak.got.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+
+import com.example.dantczak.got.R;
 
 public class MainActivity extends AppCompatActivity {
 

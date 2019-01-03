@@ -1,4 +1,4 @@
-package com.example.dantczak.got;
+package com.example.dantczak.got.Activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
+
+import com.example.dantczak.got.R;
 
 public class VerificationActivity extends AppCompatActivity {
     private AlertDialog pointsDialog;

@@ -1,8 +1,10 @@
-package com.example.dantczak.got;
+package com.example.dantczak.got.Activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+
+import com.example.dantczak.got.R;
 
 public class MountainGroupActivity extends AppCompatActivity {
 

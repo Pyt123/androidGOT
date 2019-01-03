@@ -1,4 +1,4 @@
-package com.example.dantczak.got;
+package com.example.dantczak.got.Activities;
 
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TextView;
+
+import com.example.dantczak.got.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

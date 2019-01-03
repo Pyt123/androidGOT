@@ -9,4 +9,5 @@
     <string name="title_activity_mountain_group">Filtrowanie grup górskich</string>
     <string name="title_activity_date_frame">Ustawianie przedziału dat</string>
     <string name="title_activity_gallery">Galeria</string>
+    <string name="ip">192.168.0.103</string>
 </resources>

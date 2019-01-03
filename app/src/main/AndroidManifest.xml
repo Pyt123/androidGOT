@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.dantczak.got">
-
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
-        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
         <activity
-            android:name=".MainActivity"
+            android:name=".Activities.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -20,62 +20,62 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RankingActivity"
+            android:name=".Activities.RankingActivity"
             android:label="@string/title_activity_ranking"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".Activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.dantczak.got.MainActivity" />
+                android:value="com.example.dantczak.got.Activities.MainActivity" />
         </activity>
         <activity
-            android:name=".SetupWalkActivity"
+            android:name=".Activities.SetupWalkActivity"
             android:label="@string/title_activity_setup_walk"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".Activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.dantczak.got.MainActivity" />
+                android:value="com.example.dantczak.got.Activities.MainActivity" />
         </activity>
         <activity
-            android:name=".LeaderMainActivity"
+            android:name=".Activities.LeaderMainActivity"
             android:label="@string/title_activity_leader_main"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".VerificationActivity"
+            android:name=".Activities.VerificationActivity"
             android:label="@string/title_activity_verification"
-            android:parentActivityName=".LeaderMainActivity"
+            android:parentActivityName=".Activities.LeaderMainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.dantczak.got.LeaderMainActivity" />
+                android:value="com.example.dantczak.got.Activities.LeaderMainActivity" />
         </activity>
         <activity
-            android:name=".MountainGroupActivity"
+            android:name=".Activities.MountainGroupActivity"
             android:label="@string/title_activity_mountain_group"
-            android:parentActivityName=".RankingActivity"
+            android:parentActivityName=".Activities.RankingActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.dantczak.got.RankingActivity" />
+                android:value="com.example.dantczak.got.Activities.RankingActivity" />
         </activity>
         <activity
-            android:name=".DateFrameActivity"
+            android:name=".Activities.DateFrameActivity"
             android:label="@string/title_activity_date_frame"
-            android:parentActivityName=".RankingActivity"
+            android:parentActivityName=".Activities.RankingActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.dantczak.got.RankingActivity" />
+                android:value="com.example.dantczak.got.Activities.RankingActivity" />
         </activity>
         <activity
-            android:name=".GalleryActivity"
+            android:name=".Activities.GalleryActivity"
             android:label="@string/title_activity_gallery"
-            android:parentActivityName=".VerificationActivity"
+            android:parentActivityName=".Activities.VerificationActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.dantczak.got.VerificationActivity" />
+                android:value="com.example.dantczak.got.Activities.VerificationActivity" />
         </activity>
     </application>
 
