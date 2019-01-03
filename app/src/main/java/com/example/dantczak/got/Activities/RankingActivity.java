@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,48 +17,63 @@ import android.widget.TextView;
 import com.example.dantczak.got.R;
 import com.example.dantczak.got.Utils.HttpUtils;
 import com.example.dantczak.got.Utils.JsonUtils;
-import com.example.dantczak.got.model.trasa.PunktTrasy;
 import com.example.dantczak.got.model.uzytkownik.Turysta;
 import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loopj.android.http.TextHttpResponseHandler;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
 public class RankingActivity extends AppCompatActivity {
+    private RankingAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupView();
         setupButtonListeners();
+        RecyclerView recyclerView = findViewById(R.id.ranking_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new RankingAdapter(null, this);
+        recyclerView.setAdapter(adapter);
         setupRanking();
 
     }
 
     private void setupRanking() {
-        HttpUtils.get("trasa/punktowana", null, new TextHttpResponseHandler() {
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) { }
+        try {
+            //TODO daty
+            HttpUtils.getWithBody(getApplicationContext(), "ranking/wyswietl/" + "22-01-1972/" + "22-01-2022/",
+                    new ArrayList<Long>(), new TextHttpResponseHandler() {
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                            Log.v("error", responseString);
+                        }
 
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                JavaType jt = JsonUtils.getGenericListType("com.example.dantczak.got.model.trasa.TrasaPunktowana");
-                try
-                {
-                    List<PunktTrasy> pt = JsonUtils.getObjectMapper().readValue(responseString, jt);
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        });
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                            try {
+                                JavaType jt = JsonUtils.getGenericListType("com.example.dantczak.got.model.uzytkownik.Turysta");
+                                List<Turysta> result = JsonUtils.getObjectMapper().readValue(responseString, jt);
+                                setupRankingList(result);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+        }
+        catch (Exception e) { e.printStackTrace(); }
+    }
 
-        //List<Turysta> touristList =
-        //((RecyclerView)findViewById(R.id.ranking_view)).setAdapter(new RankingAdapter(, this));
+    private void setupRankingList(List<Turysta> rankList)
+    {
+        //RecyclerView recyclerView = findViewById(R.id.ranking_view);
+        //RecyclerView.Adapter adapter = new RankingAdapter(rankList, this);
+        //recyclerView.setAdapter(adapter);
+        adapter.setTouristList(rankList);
+        adapter.notifyDataSetChanged();
     }
 
     private void setupView() {
@@ -95,7 +112,7 @@ class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.ViewHolder>
 
     public RankingAdapter(List<Turysta> touristList, Context context)
     {
-        this.touristList = touristList;
+        this.setTouristList(touristList);
         this.context = context;
     }
 
@@ -111,15 +128,25 @@ class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.ViewHolder>
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position)
     {
         Turysta tourist = touristList.get(position);
-
         viewHolder.name.setText(tourist.getImie() + " " + tourist.getNazwisko().substring(0,1) + ".");
-        viewHolder.points.setText(tourist.getZgromadzonePunkty());
+        viewHolder.points.setText(tourist.getZgromadzonePunkty().toString());
     }
 
     @Override
     public int getItemCount()
     {
-        return touristList.size();
+        if(touristList == null)
+        {
+            return 0;
+        }
+        else
+        {
+            return touristList.size();
+        }
+    }
+
+    public void setTouristList(List<Turysta> touristList) {
+        this.touristList = touristList;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder

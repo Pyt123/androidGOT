@@ -17,4 +17,8 @@ public class Przodownik extends Uzytkownik
     {
         return getId().equals(((Przodownik)obj).getId());
     }
+
+    public void setAuthorizedGrupy(List<GrupaGorska> authorizedGrupy) {
+        this.authorizedGrupy = authorizedGrupy;
+    }
 }

@@ -15,31 +15,13 @@ public class JsonUtils
         return mapper;
     }
 
-    public static JavaType getObjectType(String name)
+    public static JavaType getObjectType(String name) throws ClassNotFoundException
     {
-        JavaType javaType = null;
-        try
-        {
-            javaType = mapper.getTypeFactory().constructType(Class.forName(name));
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return javaType;
+        return mapper.getTypeFactory().constructType(Class.forName(name));
     }
 
-    public static JavaType getGenericListType(String genericTypeName)
+    public static JavaType getGenericListType(String genericTypeName) throws ClassNotFoundException
     {
-        JavaType javaType = null;
-        try
-        {
-            javaType = mapper.getTypeFactory().constructCollectionType(List.class, Class.forName(genericTypeName));
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return javaType;
+        return mapper.getTypeFactory().constructCollectionType(List.class, Class.forName(genericTypeName));
     }
 }

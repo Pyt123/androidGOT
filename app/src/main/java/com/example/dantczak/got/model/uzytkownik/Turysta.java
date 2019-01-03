@@ -32,5 +32,7 @@ public class Turysta extends Uzytkownik
     }
 
 
-
+    public void setWedrowki(List<Wedrowka> wedrowki) {
+        this.wedrowki = wedrowki;
+    }
 }
