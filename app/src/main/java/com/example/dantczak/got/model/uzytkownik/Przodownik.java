@@ -12,6 +12,17 @@ public class Przodownik extends Uzytkownik
         return authorizedGrupy;
     }
 
+    public Przodownik()
+    {
+        super();
+    }
+
+    public Przodownik(Long id, List<GrupaGorska> authorizedGrupy)
+    {
+        this.setId(id);
+        this.authorizedGrupy = authorizedGrupy;
+    }
+
     @Override
     public boolean equals(Object obj)
     {

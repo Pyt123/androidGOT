@@ -1,15 +1,14 @@
 package com.example.dantczak.got.Utils;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
-import org.json.JSONObject;
 
-import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 
 import cz.msebera.android.httpclient.entity.StringEntity;
@@ -19,11 +18,11 @@ public class HttpUtils {
 
     private static AsyncHttpClient client = new AsyncHttpClient();
 
-    public static void get(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+    public static void get(String url, @Nullable RequestParams params, AsyncHttpResponseHandler responseHandler) {
         client.get(getAbsoluteUrl(url), params, responseHandler);
     }
 
-    public static void post(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+    public static void post(String url, @Nullable RequestParams params, AsyncHttpResponseHandler responseHandler) {
         client.post(getAbsoluteUrl(url), params, responseHandler);
     }
 
@@ -34,11 +33,11 @@ public class HttpUtils {
         client.get(context, getAbsoluteUrl(url), stringEntity, "application/json", responseHandler);
     }
 
-    public static void getByUrl(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+    public static void getByUrl(String url, @Nullable RequestParams params, AsyncHttpResponseHandler responseHandler) {
         client.get(url, params, responseHandler);
     }
 
-    public static void postByUrl(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+    public static void postByUrl(String url, @Nullable RequestParams params, AsyncHttpResponseHandler responseHandler) {
         client.post(url, params, responseHandler);
     }
 

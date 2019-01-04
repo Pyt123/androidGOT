@@ -3,15 +3,31 @@ package com.example.dantczak.got.Activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
 import com.example.dantczak.got.R;
+import com.example.dantczak.got.Utils.HttpUtils;
+import com.example.dantczak.got.Utils.JsonUtils;
+import com.example.dantczak.got.model.DTO.PathToVerify;
+import com.example.dantczak.got.model.Wedrowka.TrasaSkladowa;
+import com.example.dantczak.got.model.uzytkownik.Turysta;
+import com.fasterxml.jackson.databind.JavaType;
+import com.loopj.android.http.TextHttpResponseHandler;
+
+import java.util.List;
+
+import cz.msebera.android.httpclient.Header;
+
+import com.example.dantczak.got.Utils.StaticValues;
 
 public class LeaderMainActivity extends AppCompatActivity {
     private AlertDialog dialog;
@@ -51,25 +67,56 @@ public class LeaderMainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isEntryWaiting())
-                {
-                    Intent intent = new Intent(getApplicationContext(), VerificationActivity.class);
-                    startActivity(intent);
-                }
-                else
-                {
-                    dialog.show();
-                }
+                getEntryToVerification();
             }
         });
     }
 
-    private boolean isEntryWaiting()
+    private void getEntryToVerification()
     {
-        return true;
+        try
+        {
+            HttpUtils.getWithBody(getApplicationContext(), "weryfikacja/znajdz_trase/", StaticValues.loggedInPrzodownik,
+                    new TextHttpResponseHandler() {
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                            Log.v("request failure", responseString);
+                        }
+
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                            try
+                            {
+                                if(responseString.isEmpty())
+                                {
+                                    informNoEntries();
+                                }
+                                else
+                                {
+                                    // a niech będzie, żeby sprawdzało czy dobrze parsuje
+                                    JavaType jt = JsonUtils.getObjectType("com.example.dantczak.got.model.DTO.PathToVerify");
+                                    PathToVerify result = JsonUtils.getObjectMapper().readValue(responseString, jt);
+                                    verifyEntry(responseString);
+                                }
+                            }
+                            catch (Exception e) { e.printStackTrace(); }
+                        }
+                    });
+        }
+        catch (Exception e) { e.printStackTrace(); }
     }
 
+    private void informNoEntries()
+    {
+        dialog.show();
+    }
 
+    private void verifyEntry(@NonNull String jsonTrasaSkladowa)
+    {
+        Intent intent = new Intent(getApplicationContext(), VerificationActivity.class);
+        intent.putExtra(getResources().getString(R.string.to_verify_entry_json), jsonTrasaSkladowa);
+        startActivity(intent);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

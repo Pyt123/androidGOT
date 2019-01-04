@@ -10,4 +10,9 @@
     <string name="title_activity_date_frame">Ustawianie przedziału dat</string>
     <string name="title_activity_gallery">Galeria</string>
     <string name="ip">192.168.0.103</string>
+    <string name="ranking_start_date">ranking_start_date</string>
+    <string name="ranking_end_date">ranking_end_date</string>
+    <string name="ranking_mountain_group_ids">ranking_mountain_group_ids</string>
+    <string name="to_verify_entry_json">to_verify_entry_json</string>
+
 </resources>

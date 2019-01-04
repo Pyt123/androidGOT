@@ -2,6 +2,7 @@ package com.example.dantczak.got.Activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -17,50 +18,64 @@ import android.widget.TextView;
 import com.example.dantczak.got.R;
 import com.example.dantczak.got.Utils.HttpUtils;
 import com.example.dantczak.got.Utils.JsonUtils;
+import com.example.dantczak.got.Utils.TinyDb;
 import com.example.dantczak.got.model.uzytkownik.Turysta;
 import com.fasterxml.jackson.databind.JavaType;
 import com.loopj.android.http.TextHttpResponseHandler;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import cz.msebera.android.httpclient.Header;
 
 public class RankingActivity extends AppCompatActivity {
-    private RankingAdapter adapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupView();
         setupButtonListeners();
-        RecyclerView recyclerView = findViewById(R.id.ranking_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new RankingAdapter(null, this);
-        recyclerView.setAdapter(adapter);
-        setupRanking();
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setupRanking();
     }
 
     private void setupRanking() {
-        try {
-            //TODO daty
-            HttpUtils.getWithBody(getApplicationContext(), "ranking/wyswietl/" + "22-01-1972/" + "22-01-2022/",
-                    new ArrayList<Long>(), new TextHttpResponseHandler() {
+        try
+        {
+            TinyDb tinyDb = new TinyDb(this);
+            String sd = tinyDb.getString(getResources().getString(R.string.ranking_start_date));
+            if(sd.isEmpty())
+            {
+                sd = "01-01-1972";
+            }
+            String ed = tinyDb.getString(getResources().getString(R.string.ranking_end_date));
+            if(ed.isEmpty())
+            {
+                ed = new SimpleDateFormat("dd-MM-yyyy", Locale.GERMANY).format(Calendar.getInstance().getTime());
+            }
+            List<Long> groups = tinyDb.getListLong(getResources().getString(R.string.ranking_mountain_group_ids));
+
+            HttpUtils.getWithBody(getApplicationContext(), "ranking/wyswietl/" + sd + "/" + ed, groups,
+                    new TextHttpResponseHandler() {
                         @Override
                         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                            Log.v("error", responseString);
+                            Log.v("request failure", responseString);
                         }
 
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                            try {
+                            try
+                            {
                                 JavaType jt = JsonUtils.getGenericListType("com.example.dantczak.got.model.uzytkownik.Turysta");
                                 List<Turysta> result = JsonUtils.getObjectMapper().readValue(responseString, jt);
                                 setupRankingList(result);
-                            } catch (Exception e) {
-                                e.printStackTrace();
                             }
+                            catch (Exception e) { e.printStackTrace(); }
                         }
                     });
         }
@@ -69,11 +84,10 @@ public class RankingActivity extends AppCompatActivity {
 
     private void setupRankingList(List<Turysta> rankList)
     {
-        //RecyclerView recyclerView = findViewById(R.id.ranking_view);
-        //RecyclerView.Adapter adapter = new RankingAdapter(rankList, this);
-        //recyclerView.setAdapter(adapter);
-        adapter.setTouristList(rankList);
-        adapter.notifyDataSetChanged();
+        RecyclerView recyclerView = findViewById(R.id.ranking_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        RankingAdapter adapter = new RankingAdapter(rankList, this);
+        recyclerView.setAdapter(adapter);
     }
 
     private void setupView() {

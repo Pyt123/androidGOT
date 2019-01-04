@@ -79,7 +79,7 @@
             android:layout_width="match_parent"
             android:layout_height="32dp"
             android:gravity="center_vertical|center"
-            android:text="  /  /    " />
+            android:text="  -  -    " />
 
         <Space
             android:layout_width="match_parent"

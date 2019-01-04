@@ -10,6 +10,7 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 
 import com.example.dantczak.got.R;
+import com.example.dantczak.got.Utils.TinyDb;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -52,7 +53,7 @@ public class DateFrameActivity extends AppCompatActivity implements DatePickerDi
             public void onClick(View v) {
                 startDateDialog.show();
                 startDateDialog.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimaryDark));
-                endDateDialog.getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                startDateDialog.getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorPrimaryDark));
             }
         });
 
@@ -64,15 +65,47 @@ public class DateFrameActivity extends AppCompatActivity implements DatePickerDi
                 endDateDialog.getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorPrimaryDark));
             }
         });
+
+        findViewById(R.id.confirm_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TinyDb tinyDb = new TinyDb(getApplicationContext());
+                tinyDb.putString(getResources().getString(R.string.ranking_start_date), startDate.getText().toString());
+                tinyDb.putString(getResources().getString(R.string.ranking_end_date), endDate.getText().toString());
+                finish();
+            }
+        });
     }
 
     private void setupDatePickers() {
-        Calendar calendar = Calendar.getInstance();
-        int yy = calendar.get(Calendar.YEAR);
-        int mm = calendar.get(Calendar.MONTH);
-        int dd = calendar.get(Calendar.DAY_OF_MONTH);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.GERMANY);
+        TinyDb tinyDb = new TinyDb(getApplicationContext());
+        String sds = tinyDb.getString(getResources().getString(R.string.ranking_start_date));
+        String eds = tinyDb.getString(getResources().getString(R.string.ranking_end_date));
+        Date sd, ed;
+        try
+        {
+            sd = sdf.parse(sds);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            sd = new Date(0);
+        }
+        try
+        {
+            ed = sdf.parse(eds);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            ed = Calendar.getInstance().getTime();
+        }
 
-        startDateDialog = new DatePickerDialog(this, this, yy, mm, dd);
+        startDate.setText(sdf.format(sd));
+        endDate.setText(sdf.format(ed));
+
+        startDateDialog = new DatePickerDialog(this, this, sd.getYear() + 1900, sd.getMonth(), sd.getDay());
         startDateDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 String date = createDateString(startDateDialog.getDatePicker().getDayOfMonth(),
@@ -87,7 +120,7 @@ public class DateFrameActivity extends AppCompatActivity implements DatePickerDi
             }
         });
 
-        endDateDialog = new DatePickerDialog(this, this, yy, mm, dd);
+        endDateDialog = new DatePickerDialog(this, this, ed.getYear() + 1900, ed.getMonth(), ed.getDay());
         endDateDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 String date = createDateString(endDateDialog.getDatePicker().getDayOfMonth(),
@@ -109,8 +142,7 @@ public class DateFrameActivity extends AppCompatActivity implements DatePickerDi
 
     private String createDateString(int dayOfMonth, int month, int year)
     {
-        String pattern = "dd-MM-yyyy";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.GERMANY);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.GERMANY);
         Date date = new Date(year-1900, month, dayOfMonth);
         return simpleDateFormat.format(date);
     }
