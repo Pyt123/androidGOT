@@ -18,12 +18,8 @@ import com.example.dantczak.got.R;
 import com.example.dantczak.got.Utils.HttpUtils;
 import com.example.dantczak.got.Utils.JsonUtils;
 import com.example.dantczak.got.model.DTO.PathToVerify;
-import com.example.dantczak.got.model.Wedrowka.TrasaSkladowa;
-import com.example.dantczak.got.model.uzytkownik.Turysta;
 import com.fasterxml.jackson.databind.JavaType;
 import com.loopj.android.http.TextHttpResponseHandler;
-
-import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -115,7 +111,7 @@ public class LeaderMainActivity extends AppCompatActivity {
     {
         Intent intent = new Intent(getApplicationContext(), VerificationActivity.class);
         intent.putExtra(getResources().getString(R.string.to_verify_entry_json), jsonTrasaSkladowa);
-        startActivity(intent);
+        startActivityForResult(intent, 0);
     }
 
     @Override
@@ -139,5 +135,14 @@ public class LeaderMainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(data != null && data.getBooleanExtra(getResources().getString(R.string.next_verification), false))
+        {
+            getEntryToVerification();
+        }
     }
 }

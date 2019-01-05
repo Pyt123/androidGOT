@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
+import android.text.method.DigitsKeyListener;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -95,7 +97,7 @@ public class VerificationActivity extends AppCompatActivity {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(pathToVerify.getCanModifyPoints())
+                if(!pathToVerify.getCanModifyPoints())
                 {
                     pointsDialog.show();
                 }
@@ -119,6 +121,7 @@ public class VerificationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setStatusAndContinue(Status.doPonownegoRozpatrzenia);
+
             }
         });
 
@@ -166,13 +169,14 @@ public class VerificationActivity extends AppCompatActivity {
                     @Override
                      public void onClick(DialogInterface dialog, int which) {
                         Intent intent = getIntent();
+                        intent.putExtra(getResources().getString(R.string.next_verification),true);
+                        setResult(RESULT_OK, intent);
                         finish();
-                        startActivity(intent);
                     }
         });
         nextVerificationDialog = builder.create();
 
-        if(pathToVerify.getCanModifyPoints())
+        if(!pathToVerify.getCanModifyPoints())
         {
             builder = new AlertDialog.Builder(this, R.style.MyDialogTheme);
             builder.setMessage("Przyznane punkty: " + pathToVerify.getPointsFor())
@@ -186,9 +190,20 @@ public class VerificationActivity extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     setStatusAndContinue(Status.potwierdzona);
+                    try
+                    {
+                        TextView textView = pointsDialog.findViewById(android.R.id.text1);
+                        String pointsString = textView.getText().toString();
+                        int points = Integer.parseInt(pointsString);
+                        pathToVerify.setPointsFor(points);
+                    }
+                    catch (Exception e) { e.printStackTrace(); }
                 }
             });
             final EditText input = new EditText(this);
+            input.setId(android.R.id.text1);
+            input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
+            input.setKeyListener(DigitsKeyListener.getInstance("0123456789"));
             builder.setView(input);
             pointsDialog = builder.create();
         }

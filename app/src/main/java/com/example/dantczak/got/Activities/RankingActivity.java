@@ -2,7 +2,6 @@ package com.example.dantczak.got.Activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -13,12 +12,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.dantczak.got.R;
 import com.example.dantczak.got.Utils.HttpUtils;
 import com.example.dantczak.got.Utils.JsonUtils;
+import com.example.dantczak.got.Utils.StaticValues;
 import com.example.dantczak.got.Utils.TinyDb;
+import com.example.dantczak.got.model.DTO.RankList;
 import com.example.dantczak.got.model.uzytkownik.Turysta;
 import com.fasterxml.jackson.databind.JavaType;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -60,7 +62,9 @@ public class RankingActivity extends AppCompatActivity {
             }
             List<Long> groups = tinyDb.getListLong(getResources().getString(R.string.ranking_mountain_group_ids));
 
-            HttpUtils.getWithBody(getApplicationContext(), "ranking/wyswietl/" + sd + "/" + ed, groups,
+            HttpUtils.getWithBody(getApplicationContext(),
+                    String.format(Locale.GERMANY, "ranking/wyswietl/%d/%s/%s", StaticValues.loggedInTurysta.getId(), sd, ed),
+                    groups,
                     new TextHttpResponseHandler() {
                         @Override
                         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
@@ -71,8 +75,8 @@ public class RankingActivity extends AppCompatActivity {
                         public void onSuccess(int statusCode, Header[] headers, String responseString) {
                             try
                             {
-                                JavaType jt = JsonUtils.getGenericListType("com.example.dantczak.got.model.uzytkownik.Turysta");
-                                List<Turysta> result = JsonUtils.getObjectMapper().readValue(responseString, jt);
+                                JavaType jt = JsonUtils.getObjectType("com.example.dantczak.got.model.DTO.RankList");
+                                RankList result = JsonUtils.getObjectMapper().readValue(responseString, jt);
                                 setupRankingList(result);
                             }
                             catch (Exception e) { e.printStackTrace(); }
@@ -82,7 +86,7 @@ public class RankingActivity extends AppCompatActivity {
         catch (Exception e) { e.printStackTrace(); }
     }
 
-    private void setupRankingList(List<Turysta> rankList)
+    private void setupRankingList(RankList rankList)
     {
         RecyclerView recyclerView = findViewById(R.id.ranking_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -121,12 +125,12 @@ public class RankingActivity extends AppCompatActivity {
 
 class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.ViewHolder>
 {
-    private List<Turysta> touristList;
+    private RankList rankList;
     private Context context;
 
-    public RankingAdapter(List<Turysta> touristList, Context context)
+    public RankingAdapter(RankList rankList, Context context)
     {
-        this.setTouristList(touristList);
+        this.rankList = rankList;
         this.context = context;
     }
 
@@ -141,38 +145,54 @@ class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.ViewHolder>
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position)
     {
-        Turysta tourist = touristList.get(position);
-        viewHolder.name.setText(tourist.getImie() + " " + tourist.getNazwisko().substring(0,1) + ".");
-        viewHolder.points.setText(tourist.getZgromadzonePunkty().toString());
+        if(position == rankList.getReqTouristPosition())
+        {
+            viewHolder.getRanking_row_ll().setBackgroundColor(context.getResources().getColor(R.color.colorAccent));
+        }
+        else
+        {
+            viewHolder.getRanking_row_ll().setBackgroundColor(context.getResources().getColor(R.color.colorWhite));
+        }
+        String name = rankList.getNames().get(position);
+        viewHolder.name.setText(name);
+        Integer points = rankList.getPoints().get(position);
+        viewHolder.points.setText(points.toString());
     }
 
     @Override
     public int getItemCount()
     {
-        if(touristList == null)
+        if(rankList == null)
         {
             return 0;
         }
         else
         {
-            return touristList.size();
+            return rankList.getNames().size();
         }
     }
 
-    public void setTouristList(List<Turysta> touristList) {
-        this.touristList = touristList;
+    public RankList getRankList() {
+        return rankList;
     }
+
+    public void setRankList(RankList rankList) {
+        this.rankList = rankList;
+    }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder
     {
         private TextView name;
         private TextView points;
+        private LinearLayout ranking_row_ll;
 
         public ViewHolder(@NonNull View itemView)
         {
             super(itemView);
             name = itemView.findViewById(R.id.name_text);
             points = itemView.findViewById(R.id.points_text);
+            ranking_row_ll = itemView.findViewById(R.id.ranking_row_ll);
         }
 
 
@@ -182,6 +202,10 @@ class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.ViewHolder>
 
         public TextView getPoints() {
             return points;
+        }
+
+        public LinearLayout getRanking_row_ll() {
+            return ranking_row_ll;
         }
     }
 }

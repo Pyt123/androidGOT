@@ -14,5 +14,5 @@
     <string name="ranking_end_date">ranking_end_date</string>
     <string name="ranking_mountain_group_ids">ranking_mountain_group_ids</string>
     <string name="to_verify_entry_json">to_verify_entry_json</string>
-
+    <string name="next_verification">next_verification</string>
 </resources>
