@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.example.dantczak.got.R;
 import com.example.dantczak.got.Utils.HttpUtils;
 import com.example.dantczak.got.Utils.JsonUtils;
+import com.example.dantczak.got.Utils.ResponseHandlers.NoReponseHandler;
 import com.example.dantczak.got.Utils.StaticValues;
 import com.example.dantczak.got.model.DTO.PathToVerify;
 import com.example.dantczak.got.model.trasa.SkladowyPunktTrasy;
@@ -139,19 +140,11 @@ public class VerificationActivity extends AppCompatActivity {
 
     private void setStatusAndContinue(Status status)
     {
-        HttpUtils.get(String.format(Locale.GERMANY, "weryfikacja/ustaw_status/%s/%s/%d/%d",
-                pathToVerify.getVerifyPahtId(), status.toString(),
-                StaticValues.loggedInPrzodownik.getId(), pathToVerify.getPointsFor()),
-                null,
-                new TextHttpResponseHandler() {
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                        Log.v("request failure", responseString);
-                    }
+        HttpUtils.post("weryfikacja/ustaw_status/",
+                new NoReponseHandler(),
+                pathToVerify.getVerifyPahtId().toString(), status.toString(),
+                StaticValues.loggedInPrzodownik.getId().toString(), pathToVerify.getPointsFor().toString());
 
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, String responseString) { }
-                });
         nextVerificationDialog.show();
     }
 

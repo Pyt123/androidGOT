@@ -18,10 +18,10 @@ import android.widget.TextView;
 import com.example.dantczak.got.R;
 import com.example.dantczak.got.Utils.HttpUtils;
 import com.example.dantczak.got.Utils.JsonUtils;
+import com.example.dantczak.got.Utils.ResponseHandlers.OnlySuccessMattersHandler;
 import com.example.dantczak.got.Utils.StaticValues;
 import com.example.dantczak.got.Utils.TinyDb;
 import com.example.dantczak.got.model.DTO.RankList;
-import com.example.dantczak.got.model.uzytkownik.Turysta;
 import com.fasterxml.jackson.databind.JavaType;
 import com.loopj.android.http.TextHttpResponseHandler;
 
@@ -62,15 +62,9 @@ public class RankingActivity extends AppCompatActivity {
             }
             List<Long> groups = tinyDb.getListLong(getResources().getString(R.string.ranking_mountain_group_ids));
 
-            HttpUtils.getWithBody(getApplicationContext(),
-                    String.format(Locale.GERMANY, "ranking/wyswietl/%d/%s/%s", StaticValues.loggedInTurysta.getId(), sd, ed),
+            HttpUtils.getWithBody(getApplicationContext(), "ranking/wyswietl/",
                     groups,
-                    new TextHttpResponseHandler() {
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                            Log.v("request failure", responseString);
-                        }
-
+                    new OnlySuccessMattersHandler() {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, String responseString) {
                             try
@@ -81,7 +75,8 @@ public class RankingActivity extends AppCompatActivity {
                             }
                             catch (Exception e) { e.printStackTrace(); }
                         }
-                    });
+                    },
+                    StaticValues.loggedInTurysta.getId().toString(), sd, ed);
         }
         catch (Exception e) { e.printStackTrace(); }
     }

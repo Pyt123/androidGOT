@@ -17,6 +17,7 @@ import android.widget.Button;
 import com.example.dantczak.got.R;
 import com.example.dantczak.got.Utils.HttpUtils;
 import com.example.dantczak.got.Utils.JsonUtils;
+import com.example.dantczak.got.Utils.ResponseHandlers.OnlySuccessMattersHandler;
 import com.example.dantczak.got.model.DTO.PathToVerify;
 import com.fasterxml.jackson.databind.JavaType;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -73,12 +74,7 @@ public class LeaderMainActivity extends AppCompatActivity {
         try
         {
             HttpUtils.getWithBody(getApplicationContext(), "weryfikacja/znajdz_trase/", StaticValues.loggedInPrzodownik,
-                    new TextHttpResponseHandler() {
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                            Log.v("request failure", responseString);
-                        }
-
+                    new OnlySuccessMattersHandler() {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, String responseString) {
                             try

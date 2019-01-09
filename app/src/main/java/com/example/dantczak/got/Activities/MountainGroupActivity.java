@@ -93,7 +93,7 @@ public class MountainGroupActivity extends AppCompatActivity
 
     private void setupGroups() {
         try {
-            HttpUtils.get("grupa", null,
+            HttpUtils.get("grupa",
                     new TextHttpResponseHandler() {
                         @Override
                         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
