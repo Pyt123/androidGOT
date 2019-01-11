@@ -15,11 +15,11 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
+import com.example.dantczak.got.DTO.GroupList;
 import com.example.dantczak.got.R;
 import com.example.dantczak.got.Utils.HttpUtils;
 import com.example.dantczak.got.Utils.JsonUtils;
 import com.example.dantczak.got.Utils.TinyDb;
-import com.example.dantczak.got.model.grupa.GrupaGorska;
 import com.fasterxml.jackson.databind.JavaType;
 import com.loopj.android.http.TextHttpResponseHandler;
 
@@ -50,7 +50,7 @@ public class MountainGroupActivity extends AppCompatActivity
                 if(adapter != null)
                 {
                     TinyDb tinyDb = new TinyDb(getApplicationContext());
-                    tinyDb.putListLong(getResources().getString(R.string.ranking_mountain_group_ids), adapter.getCheckedGroups());
+                    tinyDb.putListLong(getResources().getString(R.string.ranking_mountain_group_ids), adapter.getCheckedGroupIds());
                     finish();
                 }
             }
@@ -63,12 +63,12 @@ public class MountainGroupActivity extends AppCompatActivity
                 if(adapter == null)
                     { return; }
 
-                ArrayList<Long> newChecked = new ArrayList<>(adapter.getGroupList().size());
-                for(GrupaGorska gg : adapter.getGroupList())
+                ArrayList<Long> newChecked = new ArrayList<>(adapter.getGroupList().getIds());
+                for(Long id : adapter.getGroupList().getIds())
                 {
-                    newChecked.add(gg.getId());
+                    newChecked.add(id);
                 }
-                adapter.setCheckedGroups(newChecked);
+                adapter.setCheckedGroupIds(newChecked);
             }
         });
 
@@ -79,7 +79,7 @@ public class MountainGroupActivity extends AppCompatActivity
                 if(adapter == null)
                     { return; }
 
-                adapter.setCheckedGroups(new ArrayList<Long>());
+                adapter.setCheckedGroupIds(new ArrayList<Long>());
             }
         });
     }
@@ -103,8 +103,8 @@ public class MountainGroupActivity extends AppCompatActivity
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, String responseString) {
                             try {
-                                JavaType jt = JsonUtils.getGenericListType("com.example.dantczak.got.model.grupa.GrupaGorska");
-                                List<GrupaGorska> result = JsonUtils.getObjectMapper().readValue(responseString, jt);
+                                JavaType jt = JsonUtils.getObjectType("com.example.dantczak.got.DTO.GroupList");
+                                GroupList result = JsonUtils.getObjectMapper().readValue(responseString, jt);
                                 setupGroupList(result);
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -115,7 +115,7 @@ public class MountainGroupActivity extends AppCompatActivity
         catch (Exception e) { e.printStackTrace(); }
     }
 
-    private void setupGroupList(List<GrupaGorska> groupList)
+    private void setupGroupList(GroupList groupList)
     {
         TinyDb tinyDb = new TinyDb(this);
         ArrayList<Long> checked = tinyDb.getListLong(getResources().getString(R.string.ranking_mountain_group_ids));
@@ -124,20 +124,18 @@ public class MountainGroupActivity extends AppCompatActivity
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new MountainGroupsAdapter(groupList, checked, this);
         recyclerView.setAdapter(adapter);
-        adapter.setGroupList(groupList);
     }
 }
 
 class MountainGroupsAdapter extends RecyclerView.Adapter<MountainGroupsAdapter.ViewHolder>
 {
-    private List<GrupaGorska> groupList;
-    private ArrayList<Long> checkedGroups;
+    private GroupList groupList;
+    private ArrayList<Long> checkedGroupIds;
     private Context context;
 
-    public MountainGroupsAdapter(List<GrupaGorska> groupList, ArrayList<Long> checkedGroups, Context context)
-    {
-        this.setGroupList(groupList);
-        this.setCheckedGroups(checkedGroups);
+    public MountainGroupsAdapter(GroupList groupList, ArrayList<Long> checkedGroupIds, Context context) {
+        this.groupList = groupList;
+        this.checkedGroupIds = checkedGroupIds;
         this.context = context;
     }
 
@@ -152,48 +150,58 @@ class MountainGroupsAdapter extends RecyclerView.Adapter<MountainGroupsAdapter.V
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position)
     {
-        GrupaGorska group = getGroupList().get(position);
-        int index = getCheckedGroups().indexOf(group);
+        int index = checkedGroupIds.indexOf(groupList.getIds().get(position));
         viewHolder.setChecked(index >= 0);
-        viewHolder.setText(group.getNazwaGrupy());
-        viewHolder.setBindedGroup(group);
+        viewHolder.setText(groupList.getNames().get(position));
     }
 
     @Override
     public int getItemCount()
     {
-        if(getGroupList() == null)
+        if(groupList.getIds() == null)
         {
             return 0;
         }
         else
         {
-            return getGroupList().size();
+            return groupList.getIds().size();
         }
     }
 
-    public void setGroupList(List<GrupaGorska> groupList) {
-        this.groupList = groupList;
-        notifyDataSetChanged();
-    }
-
-    public ArrayList<Long> getCheckedGroups() {
-        return checkedGroups;
-    }
-
-    public void setCheckedGroups(ArrayList<Long> checkedGroups) {
-        this.checkedGroups = checkedGroups;
-        notifyDataSetChanged();
-    }
-
-    public List<GrupaGorska> getGroupList() {
+    public GroupList getGroupList()
+    {
         return groupList;
     }
+
+    public void setGroupList(GroupList groupList)
+    {
+        this.groupList = groupList;
+    }
+
+    public ArrayList<Long> getCheckedGroupIds()
+    {
+        return checkedGroupIds;
+    }
+
+    public void setCheckedGroupIds(ArrayList<Long> checkedGroupIds)
+    {
+        this.checkedGroupIds = checkedGroupIds;
+    }
+
+    public Context getContext()
+    {
+        return context;
+    }
+
+    public void setContext(Context context)
+    {
+        this.context = context;
+    }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder
     {
         private CheckBox checkedTextView;
-        private GrupaGorska bindedGroup;
 
         public ViewHolder(@NonNull View itemView)
         {
@@ -202,23 +210,12 @@ class MountainGroupsAdapter extends RecyclerView.Adapter<MountainGroupsAdapter.V
             checkedTextView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if(bindedGroup == null)
-                        { return; }
-
-                    if(isChecked)
-                    {
-                        getCheckedGroups().add(bindedGroup.getId());
-                    }
-                    else
-                    {
-                        getCheckedGroups().remove(bindedGroup.getId());
-                    }
                 }
             });
         }
 
-
-        public boolean isChecked() {
+        public boolean isChecked()
+        {
             return checkedTextView.isChecked();
         }
 
@@ -227,12 +224,9 @@ class MountainGroupsAdapter extends RecyclerView.Adapter<MountainGroupsAdapter.V
             checkedTextView.setChecked(checked);
         }
 
-        public void setText(String name) {
+        public void setText(String name)
+        {
             checkedTextView.setText(name);
-        }
-
-        public void setBindedGroup(GrupaGorska bindedGroup) {
-            this.bindedGroup = bindedGroup;
         }
     }
 }

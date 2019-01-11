@@ -8,22 +8,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.dantczak.got.DTO.RankList;
 import com.example.dantczak.got.R;
 import com.example.dantczak.got.Utils.HttpUtils;
 import com.example.dantczak.got.Utils.JsonUtils;
 import com.example.dantczak.got.Utils.ResponseHandlers.OnlySuccessMattersHandler;
 import com.example.dantczak.got.Utils.StaticValues;
 import com.example.dantczak.got.Utils.TinyDb;
-import com.example.dantczak.got.model.DTO.RankList;
 import com.fasterxml.jackson.databind.JavaType;
-import com.loopj.android.http.TextHttpResponseHandler;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -76,7 +74,7 @@ public class RankingActivity extends AppCompatActivity {
                             catch (Exception e) { e.printStackTrace(); }
                         }
                     },
-                    StaticValues.loggedInTurysta.getId().toString(), sd, ed);
+                    StaticValues.loggedInTurystaId.toString(), sd, ed);
         }
         catch (Exception e) { e.printStackTrace(); }
     }

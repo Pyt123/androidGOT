@@ -14,13 +14,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.dantczak.got.DTO.PathToVerify;
 import com.example.dantczak.got.R;
 import com.example.dantczak.got.Utils.HttpUtils;
 import com.example.dantczak.got.Utils.JsonUtils;
 import com.example.dantczak.got.Utils.ResponseHandlers.OnlySuccessMattersHandler;
-import com.example.dantczak.got.model.DTO.PathToVerify;
 import com.fasterxml.jackson.databind.JavaType;
-import com.loopj.android.http.TextHttpResponseHandler;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -73,7 +72,7 @@ public class LeaderMainActivity extends AppCompatActivity {
     {
         try
         {
-            HttpUtils.getWithBody(getApplicationContext(), "weryfikacja/znajdz_trase/", StaticValues.loggedInPrzodownik,
+            HttpUtils.get("weryfikacja/znajdz_trase/",
                     new OnlySuccessMattersHandler() {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, String responseString) {
@@ -86,14 +85,14 @@ public class LeaderMainActivity extends AppCompatActivity {
                                 else
                                 {
                                     // a niech będzie, żeby sprawdzało czy dobrze parsuje
-                                    JavaType jt = JsonUtils.getObjectType("com.example.dantczak.got.model.DTO.PathToVerify");
+                                    JavaType jt = JsonUtils.getObjectType("com.example.dantczak.got.DTO.PathToVerify");
                                     PathToVerify result = JsonUtils.getObjectMapper().readValue(responseString, jt);
                                     verifyEntry(responseString);
                                 }
                             }
                             catch (Exception e) { e.printStackTrace(); }
                         }
-                    });
+                    }, StaticValues.loggedInPrzodownikId.toString());
         }
         catch (Exception e) { e.printStackTrace(); }
     }

@@ -1,4 +1,4 @@
-package com.example.dantczak.got.model.DTO;
+package com.example.dantczak.got.DTO;
 
 import java.util.ArrayList;
 import java.util.List;

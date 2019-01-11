@@ -1,4 +1,4 @@
-package com.example.dantczak.got.model.trasa;
+package com.example.dantczak.got.DTO;
 
 public enum Status
 {

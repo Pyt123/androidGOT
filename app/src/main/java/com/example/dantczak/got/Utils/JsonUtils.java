@@ -1,6 +1,5 @@
 package com.example.dantczak.got.Utils;
 
-import com.example.dantczak.got.model.trasa.PunktTrasy;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

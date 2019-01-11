@@ -12,29 +12,25 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.method.DigitsKeyListener;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.dantczak.got.DTO.PathToVerify;
+import com.example.dantczak.got.DTO.Status;
 import com.example.dantczak.got.R;
 import com.example.dantczak.got.Utils.HttpUtils;
 import com.example.dantczak.got.Utils.JsonUtils;
 import com.example.dantczak.got.Utils.ResponseHandlers.NoReponseHandler;
 import com.example.dantczak.got.Utils.StaticValues;
-import com.example.dantczak.got.model.DTO.PathToVerify;
-import com.example.dantczak.got.model.trasa.SkladowyPunktTrasy;
-import com.example.dantczak.got.model.trasa.Status;
 import com.fasterxml.jackson.databind.JavaType;
-import com.loopj.android.http.TextHttpResponseHandler;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
-import cz.msebera.android.httpclient.Header;
 
 public class VerificationActivity extends AppCompatActivity {
     private AlertDialog pointsDialog;
@@ -82,7 +78,7 @@ public class VerificationActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.points_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        PathPointsAdapter adapter = new PathPointsAdapter(pathToVerify.getPahtPoints(),this);
+        PathPointsAdapter adapter = new PathPointsAdapter(pathToVerify.getPathPointsNames(), pathToVerify.getPathPointsCoords(),this);
         recyclerView.setAdapter(adapter);
     }
 
@@ -98,7 +94,7 @@ public class VerificationActivity extends AppCompatActivity {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!pathToVerify.getCanModifyPoints())
+                if(!pathToVerify.getCanModifyRankPoints())
                 {
                     pointsDialog.show();
                 }
@@ -142,8 +138,8 @@ public class VerificationActivity extends AppCompatActivity {
     {
         HttpUtils.post("weryfikacja/ustaw_status/",
                 new NoReponseHandler(),
-                pathToVerify.getVerifyPahtId().toString(), status.toString(),
-                StaticValues.loggedInPrzodownik.getId().toString(), pathToVerify.getPointsFor().toString());
+                pathToVerify.toString(), status.toString(),
+                StaticValues.loggedInPrzodownikId.toString(), pathToVerify.getRankPointsFor().toString());
 
         nextVerificationDialog.show();
     }
@@ -169,10 +165,10 @@ public class VerificationActivity extends AppCompatActivity {
         });
         nextVerificationDialog = builder.create();
 
-        if(!pathToVerify.getCanModifyPoints())
+        if(!pathToVerify.getCanModifyRankPoints())
         {
             builder = new AlertDialog.Builder(this, R.style.MyDialogTheme);
-            builder.setMessage("Przyznane punkty: " + pathToVerify.getPointsFor())
+            builder.setMessage("Przyznane punkty: " + pathToVerify.getRankPointsFor())
                     .setTitle("Trasa niepunktowana")
                     .setNegativeButton("Anuluj", new DialogInterface.OnClickListener() {
                         @Override
@@ -188,7 +184,7 @@ public class VerificationActivity extends AppCompatActivity {
                         TextView textView = pointsDialog.findViewById(android.R.id.text1);
                         String pointsString = textView.getText().toString();
                         int points = Integer.parseInt(pointsString);
-                        pathToVerify.setPointsFor(points);
+                        pathToVerify.setRankPointsFor(points);
                     }
                     catch (Exception e) { e.printStackTrace(); }
                 }
@@ -220,12 +216,14 @@ public class VerificationActivity extends AppCompatActivity {
 
 class PathPointsAdapter extends RecyclerView.Adapter<PathPointsAdapter.ViewHolder>
 {
-    private List<SkladowyPunktTrasy> pointsList;
+    private List<String> pointNames;
+    private List<String> pointCords;
     private Context context;
 
-    public PathPointsAdapter(List<SkladowyPunktTrasy> pointsList, Context context)
+    public PathPointsAdapter(List<String> pointNames, List<String> pointCords, Context context)
     {
-        this.pointsList = pointsList;
+        this.pointNames = pointNames;
+        this.pointCords = pointCords;
         this.context = context;
     }
 
@@ -240,16 +238,14 @@ class PathPointsAdapter extends RecyclerView.Adapter<PathPointsAdapter.ViewHolde
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position)
     {
-        SkladowyPunktTrasy point = pointsList.get(position);
-        viewHolder.name.setText(point.getPunktTrasy().getNazwaPunktu());
-        viewHolder.coords.setText(point.getPunktTrasy().getWysokoscGeograficzna()
-                + "   " + point.getPunktTrasy().getSzerokoscGeograficzna());
+        viewHolder.name.setText(pointNames.get(position));
+        viewHolder.coords.setText(pointCords.get(position));
     }
 
     @Override
     public int getItemCount()
     {
-        return pointsList.size();
+        return pointNames.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder
