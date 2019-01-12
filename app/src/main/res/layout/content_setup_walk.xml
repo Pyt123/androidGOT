@@ -4,8 +4,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:visibility="visible"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".Activities.SetupWalkActivity"
     tools:showIn="@layout/activity_setup_walk">
 
+    <Button
+        android:id="@+id/trasyPunktowaneButton"
+        style="@style/RobotoButtonStyle"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="100dp"
+        android:text="Trasy Punktowane"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/trasyNiepunktowaneButton"
+        style="@style/RobotoButtonStyle"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="50dp"
+        android:text="Trasy Niepunktowane"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/trasyPunktowaneButton" />
 </android.support.constraint.ConstraintLayout>

@@ -19,6 +19,12 @@ public class JsonUtils
         return mapper.getTypeFactory().constructType(Class.forName(name));
     }
 
+    public static JavaType getListType(Class clazz)
+    {
+        return mapper.getTypeFactory().constructCollectionType(List.class, clazz);
+
+    }
+
     public static JavaType getGenericListType(String genericTypeName) throws ClassNotFoundException
     {
         return mapper.getTypeFactory().constructCollectionType(List.class, Class.forName(genericTypeName));

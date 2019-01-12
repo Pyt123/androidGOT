@@ -15,4 +15,5 @@
     <string name="ranking_mountain_group_ids">ranking_mountain_group_ids</string>
     <string name="to_verify_entry_json">to_verify_entry_json</string>
     <string name="next_verification">next_verification</string>
+    <string name="choosePunktTitle">Wybierz punkt poczatkowy</string>
 </resources>

@@ -67,7 +67,7 @@ public class RankingActivity extends AppCompatActivity {
                         public void onSuccess(int statusCode, Header[] headers, String responseString) {
                             try
                             {
-                                JavaType jt = JsonUtils.getObjectType("com.example.dantczak.got.model.DTO.RankList");
+                                JavaType jt = JsonUtils.getObjectType("com.example.dantczak.got.DTO.RankList");
                                 RankList result = JsonUtils.getObjectMapper().readValue(responseString, jt);
                                 setupRankingList(result);
                             }
