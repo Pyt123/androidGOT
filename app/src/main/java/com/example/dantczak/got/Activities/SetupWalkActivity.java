@@ -7,7 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.dantczak.got.Activities.ulozwedrowke.ChoosePunktPoczatkowyActivity;
+import com.example.dantczak.got.Activities.wedrowkawizard.ChoosePunktPoczatkowyActivity;
 import com.example.dantczak.got.R;
 
 public class SetupWalkActivity extends AppCompatActivity {

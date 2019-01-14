@@ -79,7 +79,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.dantczak.got.Activities.VerificationActivity" />
         </activity>
-        <activity android:name=".Activities.ulozwedrowke.ChoosePunktPoczatkowyActivity"></activity>
+        <activity android:name=".Activities.wedrowkawizard.ChoosePunktPoczatkowyActivity" />
+        <activity android:name=".Activities.wedrowkawizard.ChooseOdcinekTrasyActivity" />
+        <activity
+            android:name=".Activities.wedrowkawizard.WedrowkaActivity"
+            android:label="@string/title_activity_wedrowka"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
