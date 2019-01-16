@@ -84,10 +84,9 @@ public class LeaderMainActivity extends AppCompatActivity {
                                 }
                                 else
                                 {
-                                    // a niech będzie, żeby sprawdzało czy dobrze parsuje
                                     JavaType jt = JsonUtils.getObjectType("com.example.dantczak.got.DTO.PathToVerify");
                                     PathToVerify result = JsonUtils.getObjectMapper().readValue(responseString, jt);
-                                    verifyEntry(responseString);
+                                    verifyEntry(result);
                                 }
                             }
                             catch (Exception e) { e.printStackTrace(); }
@@ -102,10 +101,11 @@ public class LeaderMainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void verifyEntry(@NonNull String jsonTrasaSkladowa)
+    private void verifyEntry(@NonNull PathToVerify pathToVerify)
     {
         Intent intent = new Intent(getApplicationContext(), VerificationActivity.class);
-        intent.putExtra(getResources().getString(R.string.to_verify_entry_json), jsonTrasaSkladowa);
+        // put extra nie wchodzi w grę, ponieważ rozmiar przekracza 1MB
+        VerificationActivity.setPathToVerifyInstance(pathToVerify);
         startActivityForResult(intent, 0);
     }
 

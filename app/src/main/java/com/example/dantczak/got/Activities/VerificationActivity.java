@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.dantczak.got.DTO.Pair;
 import com.example.dantczak.got.DTO.PathToVerify;
 import com.example.dantczak.got.DTO.Status;
 import com.example.dantczak.got.R;
@@ -33,10 +34,11 @@ import java.util.Locale;
 
 
 public class VerificationActivity extends AppCompatActivity {
+    private static PathToVerify pathToVerify;
+    public static PathToVerify getPathToVerifyInstance() { return pathToVerify; }
+    public static void setPathToVerifyInstance(PathToVerify pth) { pathToVerify = pth; }
     private AlertDialog pointsDialog;
     private AlertDialog nextVerificationDialog;
-
-    private PathToVerify pathToVerify = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,24 +49,9 @@ public class VerificationActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        setupPath();
         setupDialogs();
         setupButtonListeners();
         setupViewsWithPathValues();
-    }
-
-    private void setupPath()
-    {
-        try
-        {
-            String json = getIntent().getExtras().getString(getString(R.string.to_verify_entry_json));
-            if(json != null)
-            {
-                JavaType jt = JsonUtils.getObjectType("com.example.dantczak.got.model.DTO.PathToVerify");
-                pathToVerify = JsonUtils.getObjectMapper().readValue(json, jt);
-            }
-        }
-        catch (Exception e) { e.printStackTrace(); }
     }
 
     private void setupViewsWithPathValues()
@@ -78,7 +65,7 @@ public class VerificationActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.points_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        PathPointsAdapter adapter = new PathPointsAdapter(pathToVerify.getPathPointsNames(), pathToVerify.getPathPointsCoords(),this);
+        PathPointsAdapter adapter = new PathPointsAdapter(pathToVerify.getPointNamesAndCords(),this);
         recyclerView.setAdapter(adapter);
     }
 
@@ -94,7 +81,7 @@ public class VerificationActivity extends AppCompatActivity {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!pathToVerify.getCanModifyRankPoints())
+                if(pathToVerify.getCanModifyRankPoints())
                 {
                     pointsDialog.show();
                 }
@@ -216,14 +203,12 @@ public class VerificationActivity extends AppCompatActivity {
 
 class PathPointsAdapter extends RecyclerView.Adapter<PathPointsAdapter.ViewHolder>
 {
-    private List<String> pointNames;
-    private List<String> pointCords;
+    private List<Pair<String, String>> pointNamesAndCords;
     private Context context;
 
-    public PathPointsAdapter(List<String> pointNames, List<String> pointCords, Context context)
+    public PathPointsAdapter(List<Pair<String, String>> pointNamesAndCords, Context context)
     {
-        this.pointNames = pointNames;
-        this.pointCords = pointCords;
+        this.pointNamesAndCords = pointNamesAndCords;
         this.context = context;
     }
 
@@ -238,14 +223,14 @@ class PathPointsAdapter extends RecyclerView.Adapter<PathPointsAdapter.ViewHolde
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position)
     {
-        viewHolder.name.setText(pointNames.get(position));
-        viewHolder.coords.setText(pointCords.get(position));
+        viewHolder.name.setText(pointNamesAndCords.get(position).getFirst());
+        viewHolder.coords.setText(pointNamesAndCords.get(position).getSecond());
     }
 
     @Override
     public int getItemCount()
     {
-        return pointNames.size();
+        return pointNamesAndCords.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder

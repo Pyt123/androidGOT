@@ -19,13 +19,12 @@ import com.example.dantczak.got.DTO.GroupList;
 import com.example.dantczak.got.R;
 import com.example.dantczak.got.Utils.HttpUtils;
 import com.example.dantczak.got.Utils.JsonUtils;
+import com.example.dantczak.got.Utils.ResponseHandlers.OnlySuccessMattersHandler;
 import com.example.dantczak.got.Utils.TinyDb;
 import com.fasterxml.jackson.databind.JavaType;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -64,10 +63,7 @@ public class MountainGroupActivity extends AppCompatActivity
                     { return; }
 
                 ArrayList<Long> newChecked = new ArrayList<>(adapter.getGroupList().getIds());
-                for(Long id : adapter.getGroupList().getIds())
-                {
-                    newChecked.add(id);
-                }
+                newChecked.addAll(adapter.getGroupList().getIds());
                 adapter.setCheckedGroupIds(newChecked);
             }
         });
@@ -93,24 +89,18 @@ public class MountainGroupActivity extends AppCompatActivity
 
     private void setupGroups() {
         try {
-            HttpUtils.get("grupa",
-                    new TextHttpResponseHandler() {
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                            Log.v("request failure", responseString);
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                            try {
-                                JavaType jt = JsonUtils.getObjectType("com.example.dantczak.got.DTO.GroupList");
-                                GroupList result = JsonUtils.getObjectMapper().readValue(responseString, jt);
-                                setupGroupList(result);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
+            HttpUtils.get("grupalite", new OnlySuccessMattersHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                    try {
+                        JavaType jt = JsonUtils.getObjectType("com.example.dantczak.got.DTO.GroupList");
+                        GroupList result = JsonUtils.getObjectMapper().readValue(responseString, jt);
+                        setupGroupList(result);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         }
         catch (Exception e) { e.printStackTrace(); }
     }
@@ -186,6 +176,7 @@ class MountainGroupsAdapter extends RecyclerView.Adapter<MountainGroupsAdapter.V
     public void setCheckedGroupIds(ArrayList<Long> checkedGroupIds)
     {
         this.checkedGroupIds = checkedGroupIds;
+        notifyDataSetChanged();
     }
 
     public Context getContext()

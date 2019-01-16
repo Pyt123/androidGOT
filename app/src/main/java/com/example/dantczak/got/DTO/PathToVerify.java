@@ -7,29 +7,43 @@ import java.util.List;
 
 public class PathToVerify
 {
-    private Long verifyPahtId;
+    private Long verifyPathId;
     private Long touristId;
     private String touristName;
     private String touristSurname;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date walkDate;
-    private List<String> pathPointsNames;
-    private List<String> pathPointsCoords;
+    private List<Pair<String, String>> pointNamesAndCords;
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private List<byte[]> pics;
     private Integer rankPointsFor;
     private Boolean canModifyRankPoints;
 
     public PathToVerify() {}
 
-
-    public Long getVerifyPahtId()
+    public PathToVerify(Long verifyPathId, Long touristId, String touristName, String touristSurname,
+                        Date walkDate, List<Pair<String, String>> pointNamesAndCords,
+                        List<byte[]> pics, Integer rankPointsFor, Boolean canModifyRankPoints)
     {
-        return verifyPahtId;
+        this.verifyPathId = verifyPathId;
+        this.touristId = touristId;
+        this.touristName = touristName;
+        this.touristSurname = touristSurname;
+        this.walkDate = walkDate;
+        this.pointNamesAndCords = pointNamesAndCords;
+        this.pics = pics;
+        this.rankPointsFor = rankPointsFor;
+        this.canModifyRankPoints = canModifyRankPoints;
     }
 
-    public void setVerifyPahtId(Long verifyPahtId)
+    public Long getVerifyPathId()
     {
-        this.verifyPahtId = verifyPahtId;
+        return verifyPathId;
+    }
+
+    public void setVerifyPathId(Long verifyPathId)
+    {
+        this.verifyPathId = verifyPathId;
     }
 
     public Long getTouristId()
@@ -72,26 +86,6 @@ public class PathToVerify
         this.walkDate = walkDate;
     }
 
-    public List<String> getPathPointsNames()
-    {
-        return pathPointsNames;
-    }
-
-    public void setPathPointsNames(List<String> pathPointsNames)
-    {
-        this.pathPointsNames = pathPointsNames;
-    }
-
-    public List<String> getPathPointsCoords()
-    {
-        return pathPointsCoords;
-    }
-
-    public void setPathPointsCoords(List<String> pathPointsCoords)
-    {
-        this.pathPointsCoords = pathPointsCoords;
-    }
-
     public List<byte[]> getPics()
     {
         return pics;
@@ -110,6 +104,16 @@ public class PathToVerify
     public void setRankPointsFor(Integer rankPointsFor)
     {
         this.rankPointsFor = rankPointsFor;
+    }
+
+    public List<Pair<String, String>> getPointNamesAndCords()
+    {
+        return pointNamesAndCords;
+    }
+
+    public void setPointNamesAndCords(List<Pair<String, String>> pointNamesAndCords)
+    {
+        this.pointNamesAndCords = pointNamesAndCords;
     }
 
     public Boolean getCanModifyRankPoints()

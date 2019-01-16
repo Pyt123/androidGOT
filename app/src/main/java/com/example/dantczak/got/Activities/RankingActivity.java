@@ -138,7 +138,7 @@ class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.ViewHolder>
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position)
     {
-        if(position == rankList.getReqTouristPosition())
+        if(position == rankList.getReqTouristIndex())
         {
             viewHolder.getRanking_row_ll().setBackgroundColor(context.getResources().getColor(R.color.colorAccent));
         }
@@ -146,9 +146,9 @@ class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.ViewHolder>
         {
             viewHolder.getRanking_row_ll().setBackgroundColor(context.getResources().getColor(R.color.colorWhite));
         }
-        String name = rankList.getNames().get(position);
+        String name = rankList.getEntries().get(position).getFirst();
         viewHolder.name.setText(name);
-        Integer points = rankList.getPoints().get(position);
+        Integer points = rankList.getEntries().get(position).getSecond();
         viewHolder.points.setText(points.toString());
     }
 
@@ -161,7 +161,7 @@ class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.ViewHolder>
         }
         else
         {
-            return rankList.getNames().size();
+            return rankList.getEntries().size();
         }
     }
 

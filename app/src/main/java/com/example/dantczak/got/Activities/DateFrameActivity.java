@@ -15,6 +15,7 @@ import com.example.dantczak.got.Utils.TinyDb;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 
 
@@ -82,30 +83,32 @@ public class DateFrameActivity extends AppCompatActivity implements DatePickerDi
         TinyDb tinyDb = new TinyDb(getApplicationContext());
         String sds = tinyDb.getString(getResources().getString(R.string.ranking_start_date));
         String eds = tinyDb.getString(getResources().getString(R.string.ranking_end_date));
-        Date sd, ed;
+
+        Calendar startCal = new GregorianCalendar();
+        Calendar endCal = new GregorianCalendar();
         try
         {
-            sd = sdf.parse(sds);
+            startCal.setTime(sdf.parse(sds));
         }
         catch (Exception e)
         {
             e.printStackTrace();
-            sd = new Date(0);
+            startCal.setTime(new Date(0));
         }
         try
         {
-            ed = sdf.parse(eds);
+            endCal.setTime(sdf.parse(eds));
         }
         catch (Exception e)
         {
             e.printStackTrace();
-            ed = Calendar.getInstance().getTime();
+            endCal.setTime(Calendar.getInstance().getTime());
         }
 
-        startDate.setText(sdf.format(sd));
-        endDate.setText(sdf.format(ed));
-
-        startDateDialog = new DatePickerDialog(this, this, sd.getYear() + 1900, sd.getMonth(), sd.getDay());
+        startDate.setText(sdf.format(startCal.getTime()));
+        endDate.setText(sdf.format(endCal.getTime()));
+        startDateDialog = new DatePickerDialog(this, this, startCal.get(Calendar.YEAR),
+                startCal.get(Calendar.MONTH), startCal.get(Calendar.DAY_OF_MONTH));
         startDateDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 String date = createDateString(startDateDialog.getDatePicker().getDayOfMonth(),
@@ -120,7 +123,9 @@ public class DateFrameActivity extends AppCompatActivity implements DatePickerDi
             }
         });
 
-        endDateDialog = new DatePickerDialog(this, this, ed.getYear() + 1900, ed.getMonth(), ed.getDay());
+
+        endDateDialog = new DatePickerDialog(this, this, endCal.get(Calendar.YEAR),
+                endCal.get(Calendar.MONTH), endCal.get(Calendar.DAY_OF_MONTH));
         endDateDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 String date = createDateString(endDateDialog.getDatePicker().getDayOfMonth(),
@@ -134,7 +139,7 @@ public class DateFrameActivity extends AppCompatActivity implements DatePickerDi
                 endDateDialog.dismiss();
             }
         });
-    }
+        }
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -143,8 +148,9 @@ public class DateFrameActivity extends AppCompatActivity implements DatePickerDi
     private String createDateString(int dayOfMonth, int month, int year)
     {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.GERMANY);
-        Date date = new Date(year-1900, month, dayOfMonth);
-        return simpleDateFormat.format(date);
+        Calendar calendar = new GregorianCalendar();
+        calendar.set(year, month, dayOfMonth);
+        return simpleDateFormat.format(calendar.getTime());
     }
 
     @Override

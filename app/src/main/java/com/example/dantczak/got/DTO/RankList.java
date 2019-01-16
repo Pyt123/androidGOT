@@ -1,53 +1,60 @@
 package com.example.dantczak.got.DTO;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class RankList
 {
-    private int reqTouristPosition;
-    private List<String> names;
-    private List<Integer> points;
+    private int reqTouristIndex = -1;
+    private List<Integer> positions;
+    private List<Pair<String, Integer>> entries;
 
     public RankList()
     {
-        names = new ArrayList<>();
-        points = new ArrayList<>();
+        positions = new ArrayList<>();
+        entries = new ArrayList<>();
     }
 
     public RankList(int length)
     {
-        names = new ArrayList<>(length);
-        points = new ArrayList<>(length);
+        positions = new ArrayList<>(length);
+        entries = new ArrayList<>(length);
     }
 
-    public int getReqTouristPosition()
+    public int getReqTouristIndex()
     {
-        return reqTouristPosition;
+        return reqTouristIndex;
     }
 
-    public void setReqTouristPosition(int reqTouristPosition)
+    public void setReqTouristIndex(int reqTouristIndex)
     {
-        this.reqTouristPosition = reqTouristPosition;
+        this.reqTouristIndex = reqTouristIndex;
     }
 
-    public List<String> getNames()
+    public List<Pair<String, Integer>> getEntries()
     {
-        return names;
+        return entries;
     }
 
-    public void setNames(List<String> names)
+    public void setEntries(List<Pair<String, Integer>> entries)
     {
-        this.names = names;
+        this.entries = entries;
     }
 
-    public List<Integer> getPoints()
+    public void addEntry(Integer position, String name, Integer points)
     {
-        return points;
+        positions.add(position);
+        entries.add(new Pair<>(name, points));
     }
 
-    public void setPoints(List<Integer> points)
+    public List<Integer> getPositions()
     {
-        this.points = points;
+        return positions;
+    }
+
+    public void setPositions(List<Integer> positions)
+    {
+        this.positions = positions;
     }
 }
