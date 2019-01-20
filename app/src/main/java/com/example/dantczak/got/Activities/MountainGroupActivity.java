@@ -1,5 +1,6 @@
 package com.example.dantczak.got.Activities;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 
 import com.example.dantczak.got.DTO.GroupList;
 import com.example.dantczak.got.R;
@@ -88,11 +90,16 @@ public class MountainGroupActivity extends AppCompatActivity
     }
 
     private void setupGroups() {
+        final ProgressDialog pd = ProgressDialog.show(MountainGroupActivity.this, "", "Pobieranie danych...", true);
+        final Toast failToast = Toast.makeText(this, "Wystapił błąd... Nie można pobrać grup górskich.", Toast.LENGTH_LONG);
         try {
-            HttpUtils.get("grupalite", new OnlySuccessMattersHandler() {
+            HttpUtils.get("grupalite",
+                    new OnlySuccessMattersHandler(pd, failToast) {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                    try {
+                    try
+                    {
+                        super.onSuccess();
                         JavaType jt = JsonUtils.getObjectType("com.example.dantczak.got.DTO.GroupList");
                         GroupList result = JsonUtils.getObjectMapper().readValue(responseString, jt);
                         setupGroupList(result);

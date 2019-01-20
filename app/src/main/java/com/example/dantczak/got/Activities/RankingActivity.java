@@ -1,5 +1,6 @@
 package com.example.dantczak.got.Activities;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.dantczak.got.DTO.RankList;
 import com.example.dantczak.got.R;
@@ -77,13 +79,15 @@ public class RankingActivity extends AppCompatActivity {
 
             List<Long> groups = tinyDb.getListLong(getResources().getString(R.string.ranking_mountain_group_ids));
 
+            final Toast failToast = Toast.makeText(this, "Wystapił błąd... Nie można pobrać rankingu.", Toast.LENGTH_LONG);
             HttpUtils.getWithBody(getApplicationContext(), "ranking/wyswietl/",
                     groups,
-                    new OnlySuccessMattersHandler() {
+                    new OnlySuccessMattersHandler(null, failToast) {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, String responseString) {
                             try
                             {
+                                super.onSuccess();
                                 JavaType jt = JsonUtils.getObjectType("com.example.dantczak.got.DTO.RankList");
                                 RankList result = JsonUtils.getObjectMapper().readValue(responseString, jt);
                                 setupRankingList(result);

@@ -16,7 +16,6 @@ import com.example.dantczak.got.Utils.TinyDb;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
@@ -49,27 +48,36 @@ public class DateFrameActivity extends AppCompatActivity implements DatePickerDi
         if(tinyDb.getString(getResources().getString(R.string.ranking_start_date)).isEmpty())
         {
             ignoreStartDate.setChecked(true);
-            startDate.setClickable(false);
+            setTextColorAndClickable(startDate, ignoreStartDate.isChecked());
         }
         if(tinyDb.getString(getResources().getString(R.string.ranking_end_date)).isEmpty())
         {
             ignoreEndDate.setChecked(true);
-            endDate.setClickable(false);
+            setTextColorAndClickable(endDate, ignoreEndDate.isChecked());
         }
 
         ignoreStartDate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                startDate.setClickable(!isChecked);
+                setTextColorAndClickable(startDate, isChecked);
             }
         });
 
         ignoreEndDate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                endDate.setClickable(!isChecked);
+                setTextColorAndClickable(endDate, isChecked);
             }
         });
+    }
+
+    private void setTextColorAndClickable(TextView textView, boolean isFaded)
+    {
+        textView.setTextColor(isFaded ?
+                getResources().getColor(R.color.colorDividerColor) :
+                getResources().getColor(R.color.colorSecondaryText));
+
+        textView.setClickable(!isFaded);
     }
 
     private void setupView() {
@@ -126,24 +134,28 @@ public class DateFrameActivity extends AppCompatActivity implements DatePickerDi
 
         Calendar startCal = new GregorianCalendar();
         Calendar endCal = new GregorianCalendar();
-        try
+
+
+        if(sds.isEmpty())
         {
-            startCal.setTime(sdf.parse(sds));
+            Calendar c = new GregorianCalendar();
+            c.set(2000, 0, 1);
+            startCal.setTime(c.getTime());
         }
-        catch (Exception e)
+        else
         {
-            e.printStackTrace();
-            try { startCal.setTime(sdf.parse("01-01-2000")); }
-            catch (Exception ee) { ee.printStackTrace(); }
+            try { startCal.setTime(sdf.parse(sds)); }
+            catch (Exception e) { e.printStackTrace(); }
         }
-        try
+
+        if(eds.isEmpty())
         {
-            endCal.setTime(sdf.parse(eds));
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
             endCal.setTime(Calendar.getInstance().getTime());
+        }
+        else
+        {
+            try { endCal.setTime(sdf.parse(eds)); }
+            catch (Exception e) { e.printStackTrace(); }
         }
 
         startDate.setText(sdf.format(startCal.getTime()));

@@ -1,5 +1,6 @@
 package com.example.dantczak.got.Activities;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.dantczak.got.DTO.PathToVerify;
 import com.example.dantczak.got.R;
@@ -70,14 +72,17 @@ public class LeaderMainActivity extends AppCompatActivity {
 
     private void getEntryToVerification()
     {
+        final ProgressDialog pd = ProgressDialog.show(LeaderMainActivity.this, "", "Pobieranie danych...", true);
+        final Toast failToast = Toast.makeText(this, "Wystapił błąd... Proszę spróbować później.", Toast.LENGTH_LONG);
         try
         {
             HttpUtils.get("weryfikacja/znajdz_trase/",
-                    new OnlySuccessMattersHandler() {
+                    new OnlySuccessMattersHandler(pd, failToast) {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, String responseString) {
                             try
                             {
+                                super.onSuccess();
                                 if(responseString.isEmpty())
                                 {
                                     informNoEntries();
