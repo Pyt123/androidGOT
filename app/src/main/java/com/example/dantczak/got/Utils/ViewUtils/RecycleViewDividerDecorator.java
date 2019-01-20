@@ -1,4 +1,4 @@
-package com.example.dantczak.got.Utils;
+package com.example.dantczak.got.Utils.ViewUtils;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -9,15 +9,25 @@ import android.view.View;
 
 import com.example.dantczak.got.R;
 
+/**
+ * A RecyclerView.ItemDecoration implementation. It adds dividing lines every RecyclerView row.
+ */
 public class RecycleViewDividerDecorator extends RecyclerView.ItemDecoration
 {
     private Drawable divider;
 
+    /**
+     * Constructor.
+     * @param context application context
+     */
     public RecycleViewDividerDecorator(Context context)
     {
         divider = context.getResources().getDrawable(R.drawable.horizontal_line);
     }
 
+    /**
+     * Method performs drawing the lines. Called by RecyclerView.
+     */
     @Override
     public void onDrawOver(@NonNull Canvas canvas, @NonNull RecyclerView parent, @NonNull RecyclerView.State state)
     {

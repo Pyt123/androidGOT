@@ -18,7 +18,6 @@ import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.dantczak.got.DTO.RankList;
 import com.example.dantczak.got.DTO.ulozwedrowke.GrupaGorska;
 import com.example.dantczak.got.DTO.ulozwedrowke.PunktTrasyDTO;
 import com.example.dantczak.got.R;
@@ -26,9 +25,6 @@ import com.example.dantczak.got.Utils.HttpUtils;
 import com.example.dantczak.got.Utils.JsonUtils;
 import com.example.dantczak.got.Utils.ResponseHandlers.OnlySuccessMattersHandler;
 
-import org.w3c.dom.Text;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -117,7 +113,7 @@ public class ChoosePunktPoczatkowyActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
                     List<String> groupNames = new ArrayList<String>();
-                    List<GrupaGorska> result = JsonUtils.getObjectMapper().readValue(responseString, JsonUtils.getListType(GrupaGorska.class));
+                    List<GrupaGorska> result = JsonUtils.getObjectMapper().readValue(responseString, JsonUtils.getGenericListType(GrupaGorska.class));
                     for (GrupaGorska grupa : result )
                     {
                         groupNames.add(grupa.getNazwaGrupy());
@@ -141,7 +137,7 @@ public class ChoosePunktPoczatkowyActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
-                    List<PunktTrasyDTO> punktyTrasy = JsonUtils.getObjectMapper().readValue(responseString, JsonUtils.getListType(PunktTrasyDTO.class));
+                    List<PunktTrasyDTO> punktyTrasy = JsonUtils.getObjectMapper().readValue(responseString, JsonUtils.getGenericListType(PunktTrasyDTO.class));
                     populatePunktyViewWithData(punktyTrasy);
                 } catch (Exception e) {
                     e.printStackTrace();

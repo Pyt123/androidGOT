@@ -9,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,7 +24,7 @@ import com.fasterxml.jackson.databind.JavaType;
 
 import cz.msebera.android.httpclient.Header;
 
-import com.example.dantczak.got.Utils.StaticValues;
+import com.example.dantczak.got.Utils.StaticMockValues;
 
 public class LeaderMainActivity extends AppCompatActivity {
     private AlertDialog dialog;
@@ -96,7 +95,7 @@ public class LeaderMainActivity extends AppCompatActivity {
                             }
                             catch (Exception e) { e.printStackTrace(); }
                         }
-                    }, StaticValues.loggedInPrzodownikId.toString());
+                    }, StaticMockValues.loggedInLeaderId.toString());
         }
         catch (Exception e) { e.printStackTrace(); }
     }

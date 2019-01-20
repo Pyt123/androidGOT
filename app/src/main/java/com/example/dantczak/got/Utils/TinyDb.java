@@ -41,6 +41,9 @@ import android.text.TextUtils;
 import android.util.Log;
 
 
+/**
+ * This is a class to create high level API object for SharedPreferences operations.
+ */
 public class TinyDb {
 
     private SharedPreferences preferences;

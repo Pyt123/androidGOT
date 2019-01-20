@@ -1,12 +1,10 @@
 package com.example.dantczak.got.Activities;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -21,13 +19,11 @@ import com.example.dantczak.got.DTO.RankList;
 import com.example.dantczak.got.R;
 import com.example.dantczak.got.Utils.HttpUtils;
 import com.example.dantczak.got.Utils.JsonUtils;
-import com.example.dantczak.got.Utils.RecycleViewDividerDecorator;
+import com.example.dantczak.got.Utils.ViewUtils.RecycleViewDividerDecorator;
 import com.example.dantczak.got.Utils.ResponseHandlers.OnlySuccessMattersHandler;
-import com.example.dantczak.got.Utils.StaticValues;
+import com.example.dantczak.got.Utils.StaticMockValues;
 import com.example.dantczak.got.Utils.TinyDb;
 import com.fasterxml.jackson.databind.JavaType;
-
-import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -95,7 +91,7 @@ public class RankingActivity extends AppCompatActivity {
                             catch (Exception e) { e.printStackTrace(); }
                         }
                     },
-                    StaticValues.loggedInTurystaId.toString(), sd, ed);
+                    StaticMockValues.loggedInTouristId.toString(), sd, ed);
         }
         catch (Exception e) { e.printStackTrace(); }
     }
