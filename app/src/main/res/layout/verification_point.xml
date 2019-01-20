@@ -9,7 +9,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Wysoko"
-        android:textSize="16sp" />
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/coordinates_text"
@@ -17,4 +19,5 @@
         android:layout_height="wrap_content"
         android:text="21° 37' 21'' N   37° 21' 37'' E"
         android:textSize="16sp" />
+
 </LinearLayout>

@@ -3,6 +3,8 @@ package com.example.dantczak.got.Activities;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -23,6 +25,7 @@ import com.example.dantczak.got.DTO.PathToVerify;
 import com.example.dantczak.got.DTO.Status;
 import com.example.dantczak.got.R;
 import com.example.dantczak.got.Utils.HttpUtils;
+import com.example.dantczak.got.Utils.RecycleViewDividerDecorator;
 import com.example.dantczak.got.Utils.ResponseHandlers.NoReponseHandler;
 import com.example.dantczak.got.Utils.StaticValues;
 
@@ -69,6 +72,7 @@ public class VerificationActivity extends AppCompatActivity
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         PathPointsAdapter adapter = new PathPointsAdapter(pathToVerify.getPointNamesAndCords(),this);
         recyclerView.setAdapter(adapter);
+        recyclerView.addItemDecoration(new RecycleViewDividerDecorator(this));
     }
 
     private void setupView() {

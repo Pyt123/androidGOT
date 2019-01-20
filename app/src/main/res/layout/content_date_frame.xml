@@ -29,22 +29,34 @@
             android:layout_width="match_parent"
             android:layout_height="24dp"
             android:gravity="center_vertical|center"
-            android:text="Data początkowa" />
+            android:text="Data początkowa"
+            android:textSize="16sp" />
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="16dp" />
+            android:layout_height="8dp" />
 
         <TextView
             android:id="@+id/start_date"
             android:layout_width="match_parent"
             android:layout_height="32dp"
             android:gravity="center_vertical|center"
-            android:text="  /  /    " />
+            android:text="  /  /    "
+            android:textSize="16sp" />
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="32dp" />
+            android:layout_height="8dp" />
+
+        <CheckBox
+            android:id="@+id/ignore_start_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ignoruj datę początkową" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="16dp" />
 
         <TextView
             android:id="@+id/textView2"
@@ -55,14 +67,25 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="16dp" />
+            android:layout_height="8dp" />
 
         <TextView
             android:id="@+id/end_date"
             android:layout_width="match_parent"
             android:layout_height="32dp"
             android:gravity="center_vertical|center"
-            android:text="  -  -    " />
+            android:text="  -  -    "
+            android:textSize="16sp" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="8dp" />
+
+        <CheckBox
+            android:id="@+id/ignore_end_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ignoruj datę końcową" />
 
     </LinearLayout>
 

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -18,10 +19,13 @@ import com.example.dantczak.got.DTO.RankList;
 import com.example.dantczak.got.R;
 import com.example.dantczak.got.Utils.HttpUtils;
 import com.example.dantczak.got.Utils.JsonUtils;
+import com.example.dantczak.got.Utils.RecycleViewDividerDecorator;
 import com.example.dantczak.got.Utils.ResponseHandlers.OnlySuccessMattersHandler;
 import com.example.dantczak.got.Utils.StaticValues;
 import com.example.dantczak.got.Utils.TinyDb;
 import com.fasterxml.jackson.databind.JavaType;
+
+import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -49,15 +53,28 @@ public class RankingActivity extends AppCompatActivity {
         {
             TinyDb tinyDb = new TinyDb(this);
             String sd = tinyDb.getString(getResources().getString(R.string.ranking_start_date));
+
+            String rankHeadingString = "Ranking";
             if(sd.isEmpty())
             {
-                sd = "01-01-1972";
+                sd = "01-01-2000";
+            }
+            else
+            {
+                rankHeadingString += String.format(" od %s", sd);
             }
             String ed = tinyDb.getString(getResources().getString(R.string.ranking_end_date));
             if(ed.isEmpty())
             {
                 ed = new SimpleDateFormat("dd-MM-yyyy", Locale.GERMANY).format(Calendar.getInstance().getTime());
             }
+            else
+            {
+                rankHeadingString += String.format(" do %s", ed);
+            }
+            TextView rankHeadingText = findViewById(R.id.rank_heading);
+            rankHeadingText.setText(rankHeadingString);
+
             List<Long> groups = tinyDb.getListLong(getResources().getString(R.string.ranking_mountain_group_ids));
 
             HttpUtils.getWithBody(getApplicationContext(), "ranking/wyswietl/",
@@ -85,6 +102,7 @@ public class RankingActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         RankingAdapter adapter = new RankingAdapter(rankList, this);
         recyclerView.setAdapter(adapter);
+        recyclerView.addItemDecoration(new RecycleViewDividerDecorator(this));
     }
 
     private void setupView() {
@@ -140,11 +158,11 @@ class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.ViewHolder>
     {
         if(position == rankList.getReqTouristIndex())
         {
-            viewHolder.getRanking_row_ll().setBackgroundColor(context.getResources().getColor(R.color.colorAccent));
+            viewHolder.getRanking_row_ll().setBackgroundColor(context.getResources().getColor(R.color.colorPrimaryLight));
         }
         else
         {
-            viewHolder.getRanking_row_ll().setBackgroundColor(context.getResources().getColor(R.color.colorWhite));
+            viewHolder.getRanking_row_ll().setBackgroundColor(context.getResources().getColor(R.color.colorBackground));
         }
         String name = rankList.getEntries().get(position).getFirst();
         viewHolder.name.setText(name);

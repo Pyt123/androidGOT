@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
@@ -24,14 +26,50 @@ public class DateFrameActivity extends AppCompatActivity implements DatePickerDi
     private TextView endDate;
     private DatePickerDialog startDateDialog;
     private DatePickerDialog endDateDialog;
+    private CheckBox ignoreStartDate;
+    private CheckBox ignoreEndDate;
+    private TinyDb tinyDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupView();
+        tinyDb = new TinyDb(this);
         findViews();
         setupButtonListeners();
         setupDatePickers();
+        setupCheckboxes();
+    }
+
+    private void setupCheckboxes()
+    {
+        ignoreStartDate = findViewById(R.id.ignore_start_date);
+        ignoreEndDate = findViewById(R.id.ignore_end_date);
+
+        if(tinyDb.getString(getResources().getString(R.string.ranking_start_date)).isEmpty())
+        {
+            ignoreStartDate.setChecked(true);
+            startDate.setClickable(false);
+        }
+        if(tinyDb.getString(getResources().getString(R.string.ranking_end_date)).isEmpty())
+        {
+            ignoreEndDate.setChecked(true);
+            endDate.setClickable(false);
+        }
+
+        ignoreStartDate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                startDate.setClickable(!isChecked);
+            }
+        });
+
+        ignoreEndDate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                endDate.setClickable(!isChecked);
+            }
+        });
     }
 
     private void setupView() {
@@ -70,9 +108,12 @@ public class DateFrameActivity extends AppCompatActivity implements DatePickerDi
         findViewById(R.id.confirm_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TinyDb tinyDb = new TinyDb(getApplicationContext());
-                tinyDb.putString(getResources().getString(R.string.ranking_start_date), startDate.getText().toString());
-                tinyDb.putString(getResources().getString(R.string.ranking_end_date), endDate.getText().toString());
+                String startDateString = ignoreStartDate.isChecked() ? "" : startDate.getText().toString();
+                tinyDb.putString(getResources().getString(R.string.ranking_start_date), startDateString);
+
+                String endDateString = ignoreEndDate.isChecked() ? "" : endDate.getText().toString();
+                tinyDb.putString(getResources().getString(R.string.ranking_end_date), endDateString);
+
                 finish();
             }
         });
@@ -80,7 +121,6 @@ public class DateFrameActivity extends AppCompatActivity implements DatePickerDi
 
     private void setupDatePickers() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.GERMANY);
-        TinyDb tinyDb = new TinyDb(getApplicationContext());
         String sds = tinyDb.getString(getResources().getString(R.string.ranking_start_date));
         String eds = tinyDb.getString(getResources().getString(R.string.ranking_end_date));
 
@@ -93,7 +133,8 @@ public class DateFrameActivity extends AppCompatActivity implements DatePickerDi
         catch (Exception e)
         {
             e.printStackTrace();
-            startCal.setTime(new Date(0));
+            try { startCal.setTime(sdf.parse("01-01-2000")); }
+            catch (Exception ee) { ee.printStackTrace(); }
         }
         try
         {
