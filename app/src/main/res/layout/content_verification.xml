@@ -131,16 +131,15 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/points_view"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="14dp"
-        android:layout_marginRight="14dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout6"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView12">
 
@@ -169,7 +168,7 @@
 
             <Button
                 android:id="@+id/zatwierdz_button"
-                android:layout_width="145dp"
+                android:layout_width="140dp"
                 android:layout_height="40dp"
                 android:text="Zatwierdź"
                 android:textSize="14sp"
@@ -178,7 +177,7 @@
 
             <Button
                 android:id="@+id/odrzuc_button"
-                android:layout_width="145dp"
+                android:layout_width="140dp"
                 android:layout_height="40dp"
                 android:text="Odrzuć"
                 android:textSize="14sp"
@@ -195,15 +194,14 @@
 
             <Button
                 android:id="@+id/do_ponownego_button"
-                android:layout_width="240dp"
+                android:layout_width="230dp"
                 android:layout_height="40dp"
                 android:gravity="center"
                 android:text="Do ponownego rozpatrzenia"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/gallery_icon"
-                app:layout_constraintVertical_bias="1.0" />
+                app:layout_constraintTop_toBottomOf="@+id/gallery_icon" />
 
             <ImageView
                 android:id="@+id/gallery_icon"

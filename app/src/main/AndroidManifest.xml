@@ -14,7 +14,8 @@
         <activity
             android:name=".Activities.MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,7 +26,8 @@
             android:name=".Activities.RankingActivity"
             android:label="@string/title_activity_ranking"
             android:parentActivityName=".Activities.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.dantczak.got.Activities.MainActivity" />
@@ -34,7 +36,8 @@
             android:name=".Activities.SetupWalkActivity"
             android:label="@string/title_activity_setup_walk"
             android:parentActivityName=".Activities.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.dantczak.got.Activities.MainActivity" />
@@ -42,12 +45,14 @@
         <activity
             android:name=".Activities.LeaderMainActivity"
             android:label="@string/title_activity_leader_main"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Activities.VerificationActivity"
             android:label="@string/title_activity_verification"
             android:parentActivityName=".Activities.LeaderMainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.dantczak.got.Activities.LeaderMainActivity" />
@@ -56,7 +61,8 @@
             android:name=".Activities.MountainGroupActivity"
             android:label="@string/title_activity_mountain_group"
             android:parentActivityName=".Activities.RankingActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.dantczak.got.Activities.RankingActivity" />
@@ -65,7 +71,8 @@
             android:name=".Activities.DateFrameActivity"
             android:label="@string/title_activity_date_frame"
             android:parentActivityName=".Activities.RankingActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.dantczak.got.Activities.RankingActivity" />

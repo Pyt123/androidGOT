@@ -59,7 +59,7 @@
 
             <Button
                 android:id="@+id/zanacz_button"
-                android:layout_width="145dp"
+                android:layout_width="141dp"
                 android:layout_height="40dp"
                 android:text="Zaznacz wszystkie"
                 android:textSize="14sp"
@@ -70,14 +70,13 @@
 
             <Button
                 android:id="@+id/odznacz_button"
-                android:layout_width="145dp"
+                android:layout_width="141dp"
                 android:layout_height="40dp"
                 android:text="Odznacz wszystkie"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/confirm_button"
-                app:layout_constraintVertical_bias="1.0" />
+                app:layout_constraintTop_toBottomOf="@+id/confirm_button" />
         </LinearLayout>
     </LinearLayout>
 

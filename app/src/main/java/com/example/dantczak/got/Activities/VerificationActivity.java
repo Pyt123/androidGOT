@@ -23,31 +23,33 @@ import com.example.dantczak.got.DTO.PathToVerify;
 import com.example.dantczak.got.DTO.Status;
 import com.example.dantczak.got.R;
 import com.example.dantczak.got.Utils.HttpUtils;
-import com.example.dantczak.got.Utils.JsonUtils;
 import com.example.dantczak.got.Utils.ResponseHandlers.NoReponseHandler;
 import com.example.dantczak.got.Utils.StaticValues;
-import com.fasterxml.jackson.databind.JavaType;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
 
-public class VerificationActivity extends AppCompatActivity {
+public class VerificationActivity extends AppCompatActivity
+{
     private static PathToVerify pathToVerify;
     public static PathToVerify getPathToVerifyInstance() { return pathToVerify; }
     public static void setPathToVerifyInstance(PathToVerify pth) { pathToVerify = pth; }
+
     private AlertDialog pointsDialog;
     private AlertDialog nextVerificationDialog;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setupView();
     }
 
     @Override
-    protected void onResume() {
+    protected void onResume()
+    {
         super.onResume();
         setupDialogs();
         setupButtonListeners();
@@ -105,7 +107,6 @@ public class VerificationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setStatusAndContinue(Status.doPonownegoRozpatrzenia);
-
             }
         });
 
@@ -113,19 +114,20 @@ public class VerificationActivity extends AppCompatActivity {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(getApplicationContext(), GalleryActivity.class);
                 intent.putExtra(getResources().getString(R.string.to_verify_entry_json),
                         getIntent().getStringExtra(getResources().getString(R.string.to_verify_entry_json)));
-                startActivityForResult(intent, 0);
+                startActivity(intent);
             }
         });
     }
 
     private void setStatusAndContinue(Status status)
     {
-        HttpUtils.post("weryfikacja/ustaw_status/",
+        HttpUtils.get("weryfikacja/ustaw_status/",
                 new NoReponseHandler(),
-                pathToVerify.toString(), status.toString(),
+                pathToVerify.getVerifyPathId().toString(), status.toString(),
                 StaticValues.loggedInPrzodownikId.toString(), pathToVerify.getRankPointsFor().toString());
 
         nextVerificationDialog.show();
@@ -152,7 +154,7 @@ public class VerificationActivity extends AppCompatActivity {
         });
         nextVerificationDialog = builder.create();
 
-        if(!pathToVerify.getCanModifyRankPoints())
+        if(pathToVerify.getCanModifyRankPoints())
         {
             builder = new AlertDialog.Builder(this, R.style.MyDialogTheme);
             builder.setMessage("Przyznane punkty: " + pathToVerify.getRankPointsFor())
@@ -165,7 +167,6 @@ public class VerificationActivity extends AppCompatActivity {
                     }).setPositiveButton("Potwierdź", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    setStatusAndContinue(Status.potwierdzona);
                     try
                     {
                         TextView textView = pointsDialog.findViewById(android.R.id.text1);
@@ -174,6 +175,7 @@ public class VerificationActivity extends AppCompatActivity {
                         pathToVerify.setRankPointsFor(points);
                     }
                     catch (Exception e) { e.printStackTrace(); }
+                    setStatusAndContinue(Status.potwierdzona);
                 }
             });
             final EditText input = new EditText(this);
@@ -182,21 +184,6 @@ public class VerificationActivity extends AppCompatActivity {
             input.setKeyListener(DigitsKeyListener.getInstance("0123456789"));
             builder.setView(input);
             pointsDialog = builder.create();
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        String json = data.getStringExtra(getResources().getString(R.string.to_verify_entry_json));
-        if (json != null)
-        {
-            try
-            {
-                JavaType jt = JsonUtils.getObjectType("com.example.dantczak.got.model.DTO.PathToVerify");
-                pathToVerify = JsonUtils.getObjectMapper().readValue(json, jt);
-            }
-            catch (Exception e) { e.printStackTrace(); }
         }
     }
 }
