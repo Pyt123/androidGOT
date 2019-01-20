@@ -129,7 +129,7 @@ public class VerificationActivity extends AppCompatActivity
 
     private void setStatusAndContinue(Status status)
     {
-        HttpUtils.get("weryfikacja/ustaw_status/",
+        HttpUtils.post("weryfikacja/ustaw_status/",
                 new NoReponseHandler(),
                 pathToVerify.getVerifyPathId().toString(), status.toString(),
                 StaticValues.loggedInPrzodownikId.toString(), pathToVerify.getRankPointsFor().toString());
