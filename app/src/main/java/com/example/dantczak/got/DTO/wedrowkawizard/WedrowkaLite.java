@@ -5,9 +5,9 @@ import java.util.List;
 
 public class WedrowkaLite {
     private String nazwa;
-    private List<TrasaSkladowa> trasySkladowe;
+    private List<TrasaSkladowaLite> trasySkladowe;
 
-    public WedrowkaLite(String nazwa, List<TrasaSkladowa> trasySkladowe) {
+    public WedrowkaLite(String nazwa, List<TrasaSkladowaLite> trasySkladowe) {
         this.nazwa = nazwa;
         this.trasySkladowe = trasySkladowe;
     }
@@ -26,11 +26,11 @@ public class WedrowkaLite {
         this.nazwa = nazwa;
     }
 
-    public List<TrasaSkladowa> getTrasySkladowe() {
+    public List<TrasaSkladowaLite> getTrasySkladowe() {
         return trasySkladowe;
     }
 
-    public void setTrasySkladowe(List<TrasaSkladowa> trasySkladowe) {
+    public void setTrasySkladowe(List<TrasaSkladowaLite> trasySkladowe) {
         this.trasySkladowe = trasySkladowe;
     }
 
@@ -38,29 +38,29 @@ public class WedrowkaLite {
     public float calcDistanceSum()
     {
         float sum = 0;
-        for (TrasaSkladowa trasaSkladowa : trasySkladowe)
+        for (TrasaSkladowaLite trasaSkladowaLite : trasySkladowe)
         {
-            sum += trasaSkladowa.getTrasaPunktowanaLite().getDistance();
+            sum += trasaSkladowaLite.getTrasaPunktowanaLite().getDistance();
         }
         return sum;
     }
     public int calcPtsSum()
     {
         int sum = 0;
-        for (TrasaSkladowa trasaSkladowa: trasySkladowe)
+        for (TrasaSkladowaLite trasaSkladowaLite : trasySkladowe)
         {
-            sum += trasaSkladowa.getTrasaPunktowanaLite().getLiczbaPunktow();
+            sum += trasaSkladowaLite.getTrasaPunktowanaLite().getLiczbaPunktow();
         }
         return sum;
     }
-    private void addTrasaSkladowa(TrasaSkladowa trasaSkladowa)
+    private void addTrasaSkladowa(TrasaSkladowaLite trasaSkladowaLite)
     {
-        this.trasySkladowe.add(trasaSkladowa);
+        this.trasySkladowe.add(trasaSkladowaLite);
     }
     public void addTrasa(TrasaPunktowanaLite trasaPunktowanaLite)
     {
-        TrasaSkladowa trasaSkladowa = new TrasaSkladowa(trasaPunktowanaLite, this.trasySkladowe.size());
-        addTrasaSkladowa(trasaSkladowa);
+        TrasaSkladowaLite trasaSkladowaLite = new TrasaSkladowaLite(trasaPunktowanaLite, this.trasySkladowe.size());
+        addTrasaSkladowa(trasaSkladowaLite);
     }
 
 }

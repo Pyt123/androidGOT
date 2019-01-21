@@ -9,21 +9,34 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
+import com.example.dantczak.got.Activities.SetupWalkActivity;
 import com.example.dantczak.got.DTO.wedrowkawizard.PunktTrasyLite;
 import com.example.dantczak.got.DTO.wedrowkawizard.TrasaPunktowanaLite;
-import com.example.dantczak.got.DTO.wedrowkawizard.TrasaSkladowa;
+import com.example.dantczak.got.DTO.wedrowkawizard.TrasaSkladowaLite;
 import com.example.dantczak.got.DTO.wedrowkawizard.WedrowkaLite;
 import com.example.dantczak.got.R;
+import com.example.dantczak.got.Utils.HttpUtils;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.msebera.android.httpclient.Header;
+
 public class WedrowkaActivity extends AppCompatActivity {
+
+
+    private static final  String WEDROWKA_URL  = "/wedrowka";
 
     private Button exitButton;
     private Button addAnotherTrasaButton;
     private RecyclerView wedrowkaRecyclerView;
+    private TextView sumaPktTextView;
+    private TextView sumaDistTextView;
+    private EditText wedrowkaNameEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +55,19 @@ public class WedrowkaActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         exitButton = findViewById(R.id.zakoncz_button);
         addAnotherTrasaButton = findViewById(R.id.add_trasa_button);
+        sumaDistTextView = findViewById(R.id.sum_dist_text);
+        sumaPktTextView = findViewById(R.id.sum_pkt_text);
+        wedrowkaNameEditText = findViewById(R.id.wedrowka_name_text);
+
+
+
+        WedrowkaLite wedrowkaLite = CreateWedrowkaSessionHolder.getInstance().getWedrowkaLite();
+
+        sumaDistTextView.setText(String.format("Suma km dotychczas: %.2f", wedrowkaLite.calcDistanceSum() ));
+        sumaPktTextView.setText(String.format("Suma pkt dotychczas: %d", wedrowkaLite.calcPtsSum()));
+
+        wedrowkaNameEditText.setText(wedrowkaLite.getNazwa()!=null? wedrowkaLite.getNazwa(): "Nazwa wędrówki");
+
 
         setupRecyclerView();
 
@@ -56,18 +82,18 @@ public class WedrowkaActivity extends AppCompatActivity {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(wedrowkaRecyclerView.getContext(), DividerItemDecoration.VERTICAL );
         wedrowkaRecyclerView.addItemDecoration(dividerItemDecoration);
 
-        List<TrasaSkladowa> trasySkladowe = CreateWedrowkaSessionHolder.getInstance().getWedrowkaLite().getTrasySkladowe();
+        List<TrasaSkladowaLite> trasySkladowe = CreateWedrowkaSessionHolder.getInstance().getWedrowkaLite().getTrasySkladowe();
 
         populateTrasyViewWithData(createTrasaList(trasySkladowe));
 
 
     }
 
-    private List<TrasaPunktowanaLite> createTrasaList(List<TrasaSkladowa> trasySkladowe) {
+    private List<TrasaPunktowanaLite> createTrasaList(List<TrasaSkladowaLite> trasySkladowe) {
         List<TrasaPunktowanaLite> trasaPunktowanaLites = new ArrayList<>();
-        for (TrasaSkladowa trasaSkladowa : trasySkladowe)
+        for (TrasaSkladowaLite trasaSkladowaLite : trasySkladowe)
         {
-            TrasaPunktowanaLite trasa = trasaSkladowa.getTrasaPunktowanaLite();
+            TrasaPunktowanaLite trasa = trasaSkladowaLite.getTrasaPunktowanaLite();
             trasaPunktowanaLites.add(trasa);
         }
         return trasaPunktowanaLites;
@@ -103,13 +129,48 @@ public class WedrowkaActivity extends AppCompatActivity {
                 setAddAnotherTrasaButtonClicked();
             }
         });
+
+        wedrowkaNameEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                    CreateWedrowkaSessionHolder.getInstance().getWedrowkaLite().setNazwa(wedrowkaNameEditText.getText().toString());
+            }
+        });
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WedrowkaLite wedrowkaLite = CreateWedrowkaSessionHolder.getInstance().getWedrowkaLite();
+                wedrowkaLite.setNazwa(wedrowkaNameEditText.getText().toString());
+                try {
+                    HttpUtils.postWithBody(getApplicationContext(), WEDROWKA_URL, wedrowkaLite, new AsyncHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+                        }
+                    });
+                } catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
+                CreateWedrowkaSessionHolder.getInstance().clearWedrowka();
+
+                Intent intent = new Intent(getApplicationContext(),SetupWalkActivity.class);
+                startActivity(intent);
+
+            }
+        });
     }
 
     private void setAddAnotherTrasaButtonClicked()
     {
         WedrowkaLite wedrowka = CreateWedrowkaSessionHolder.getInstance().getWedrowkaLite();
-        List<TrasaSkladowa> trasySkladowe = wedrowka.getTrasySkladowe();
-        TrasaSkladowa lastTrasa = trasySkladowe.get(trasySkladowe.size()-1);
+        List<TrasaSkladowaLite> trasySkladowe = wedrowka.getTrasySkladowe();
+        TrasaSkladowaLite lastTrasa = trasySkladowe.get(trasySkladowe.size()-1);
         PunktTrasyLite punktKoncowyLastTrasa =  lastTrasa.getTrasaPunktowanaLite().getPunktKoncowy();
 
         Intent intent = new Intent(getApplicationContext(), ChooseOdcinekTrasyActivity.class);

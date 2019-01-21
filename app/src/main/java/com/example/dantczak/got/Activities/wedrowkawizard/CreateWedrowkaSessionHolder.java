@@ -28,5 +28,8 @@ public class CreateWedrowkaSessionHolder {
     {
         return wedrowkaLite;
     }
+    public void clearWedrowka() {
+        wedrowkaLite = null;
+    }
 
 }

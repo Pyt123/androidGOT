@@ -10,12 +10,13 @@ import com.loopj.android.http.RequestParams;
 
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 import cz.msebera.android.httpclient.entity.StringEntity;
 
 public class HttpUtils {
     //private static final String BASE_URL = "http://192.168.0.103:21037/";
-    private static final String BASE_URL = "http://192.168.2.7:8080/";
+    private static final String BASE_URL = "http://192.168.2.11:8080/";
     private static final String CONTENT_TYPE = "application/json";
 
     private static AsyncHttpClient client = new AsyncHttpClient();
@@ -48,7 +49,8 @@ public class HttpUtils {
     {
         url = concatParamsToUrl(url, params);
         String str = JsonUtils.getObjectMapper().writeValueAsString(bodyObject);
-        StringEntity stringEntity = new StringEntity(str);
+        StringEntity stringEntity = new StringEntity(str, "UTF-8");
+        System.out.println(str);
         client.post(context, getAbsoluteUrl(url), stringEntity, CONTENT_TYPE, responseHandler);
     }
 

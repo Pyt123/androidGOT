@@ -1,11 +1,11 @@
 package com.example.dantczak.got.DTO.wedrowkawizard;
 
-public class TrasaSkladowa {
+public class TrasaSkladowaLite {
     private TrasaPunktowanaLite trasaPunktowanaLite;
     private int kolejnosc;
 
 
-    public TrasaSkladowa(TrasaPunktowanaLite trasaPunktowanaLite, int kolejnosc) {
+    public TrasaSkladowaLite(TrasaPunktowanaLite trasaPunktowanaLite, int kolejnosc) {
         this.trasaPunktowanaLite = trasaPunktowanaLite;
         this.kolejnosc = kolejnosc;
     }
