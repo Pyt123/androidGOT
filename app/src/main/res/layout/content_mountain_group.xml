@@ -45,7 +45,7 @@
 
             <Button
                 android:id="@+id/confirm_button"
-                android:layout_width="160dp"
+                android:layout_width="180dp"
                 android:layout_height="40dp"
                 android:text="Potwierdź"
                 android:textSize="14sp" />
@@ -59,19 +59,20 @@
 
             <Button
                 android:id="@+id/zanacz_button"
-                android:layout_width="141dp"
+                android:layout_width="0dp"
                 android:layout_height="40dp"
+                android:layout_weight="1"
                 android:text="Zaznacz wszystkie"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/confirm_button"
-                app:layout_constraintVertical_bias="1.0" />
+                app:layout_constraintTop_toBottomOf="@+id/confirm_button" />
 
             <Button
                 android:id="@+id/odznacz_button"
-                android:layout_width="141dp"
+                android:layout_width="0dp"
                 android:layout_height="40dp"
+                android:layout_weight="1"
                 android:text="Odznacz wszystkie"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"

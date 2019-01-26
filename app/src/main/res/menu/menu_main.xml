@@ -7,4 +7,10 @@
         android:orderInCategory="100"
         android:title="@string/change_panel"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/change_ip_action"
+        android:orderInCategory="200"
+        android:title="@string/change_ip"
+        app:showAsAction="never" />
 </menu>

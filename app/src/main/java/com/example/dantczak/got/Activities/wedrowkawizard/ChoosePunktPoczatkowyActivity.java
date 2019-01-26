@@ -127,7 +127,7 @@ public class ChoosePunktPoczatkowyActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
                     List<String> groupNames = new ArrayList<String>();
-                    List<GrupaGorska> result = JsonUtils.getObjectMapper().readValue(responseString, JsonUtils.getListType(GrupaGorska.class));
+                    List<GrupaGorska> result = JsonUtils.getObjectMapper().readValue(responseString, JsonUtils.getGenericListType(GrupaGorska.class));
                     for (GrupaGorska grupa : result )
                     {
                         groupNames.add(grupa.getNazwaGrupy());
@@ -151,7 +151,7 @@ public class ChoosePunktPoczatkowyActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
-                    List<PunktTrasyLite> punktyTrasy = JsonUtils.getObjectMapper().readValue(responseString, JsonUtils.getListType(PunktTrasyLite.class));
+                    List<PunktTrasyLite> punktyTrasy = JsonUtils.getObjectMapper().readValue(responseString, JsonUtils.getGenericListType(PunktTrasyLite.class));
                     populatePunktyViewWithData(punktyTrasy);
                 } catch (Exception e) {
                     e.printStackTrace();

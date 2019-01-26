@@ -18,4 +18,6 @@
     <string name="choosePunktTitle">Wybierz punkt poczatkowy</string>
     <string name="chooseTrasaTitle">Wybierz odcinek trasy</string>
     <string name="title_activity_wedrowka">WedrowkaActivity</string>
+    <string name="change_ip">Zmień IP</string>
+    <string name="ip_key">Zmień IP</string>
 </resources>

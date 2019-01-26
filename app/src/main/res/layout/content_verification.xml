@@ -138,7 +138,8 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout6"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout7"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView12"
@@ -146,6 +147,32 @@
 
     </android.support.v7.widget.RecyclerView>
 
+    <LinearLayout
+        android:id="@+id/linearLayout7"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/gallery_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:scaleX="1.25"
+            android:scaleY="1.25"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@android:drawable/ic_menu_gallery" />
+    </LinearLayout>
     <LinearLayout
         android:id="@+id/linearLayout6"
         android:layout_width="match_parent"
@@ -169,21 +196,21 @@
 
             <Button
                 android:id="@+id/zatwierdz_button"
-                android:layout_width="140dp"
+                android:layout_width="0dp"
                 android:layout_height="40dp"
+                android:layout_weight="1"
                 android:text="Zatwierdź"
                 android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/gallery_icon" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <Button
                 android:id="@+id/odrzuc_button"
-                android:layout_width="140dp"
+                android:layout_width="0dp"
                 android:layout_height="40dp"
+                android:layout_weight="1"
                 android:text="Odrzuć"
                 android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/gallery_icon" />
+                app:layout_constraintEnd_toEndOf="parent" />
 
         </LinearLayout>
 
@@ -195,23 +222,14 @@
 
             <Button
                 android:id="@+id/do_ponownego_button"
-                android:layout_width="230dp"
+                android:layout_width="0dp"
                 android:layout_height="40dp"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:text="Do ponownego rozpatrzenia"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/gallery_icon" />
-
-            <ImageView
-                android:id="@+id/gallery_icon"
-                android:layout_width="50dp"
-                android:layout_height="40dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:srcCompat="@android:drawable/ic_menu_gallery" />
+                app:layout_constraintEnd_toEndOf="parent" />
         </LinearLayout>
 
     </LinearLayout>

@@ -54,14 +54,16 @@
 
         <Button
             android:id="@+id/grupy_button"
-            android:layout_width="140dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="match_parent"
             android:text="Grupy górskie"
             android:textSize="14sp" />
 
         <Button
             android:id="@+id/daty_button"
-            android:layout_width="140dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="match_parent"
             android:text="Przedział dat"
             android:textSize="14sp" />

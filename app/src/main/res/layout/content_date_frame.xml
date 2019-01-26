@@ -47,17 +47,19 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="8dp" />
+            android:layout_height="16dp" />
 
         <CheckBox
             android:id="@+id/ignore_start_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ignoruj datę początkową" />
+            android:text="Ignoruj datę początkową"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"/>
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="16dp" />
+            android:layout_height="24dp" />
 
         <TextView
             android:id="@+id/textView2"
@@ -82,13 +84,15 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="8dp" />
+            android:layout_height="16dp" />
 
         <CheckBox
             android:id="@+id/ignore_end_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ignoruj datę końcową" />
+            android:text="Ignoruj datę końcową"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"/>
 
     </LinearLayout>
 

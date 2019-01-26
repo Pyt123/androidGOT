@@ -101,7 +101,7 @@ public class ChooseOdcinekTrasyActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
-                    List<TrasaPunktowanaLite> trasy = JsonUtils.getObjectMapper().readValue(responseString, JsonUtils.getListType(TrasaPunktowanaLite.class));
+                    List<TrasaPunktowanaLite> trasy = JsonUtils.getObjectMapper().readValue(responseString, JsonUtils.getGenericListType(TrasaPunktowanaLite.class));
                     populateTrasyViewWithData(trasy);
                 } catch (Exception e) {
                     e.printStackTrace();

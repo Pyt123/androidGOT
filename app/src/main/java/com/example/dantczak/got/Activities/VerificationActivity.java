@@ -10,7 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.text.method.DigitsKeyListener;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -174,17 +176,42 @@ public class VerificationActivity extends AppCompatActivity
                         TextView textView = pointsDialog.findViewById(android.R.id.text1);
                         String pointsString = textView.getText().toString();
                         int points = Integer.parseInt(pointsString);
-                        pathToVerify.setRankPointsFor(points);
+                        if(points > 0)
+                        {
+                            pathToVerify.setRankPointsFor(points);
+                            setStatusAndContinue(Status.potwierdzona);
+                        }
                     }
                     catch (Exception e) { e.printStackTrace(); }
-                    setStatusAndContinue(Status.potwierdzona);
                 }
             });
+
             final EditText input = new EditText(this);
             input.setId(android.R.id.text1);
             input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
             input.setKeyListener(DigitsKeyListener.getInstance("0123456789"));
+            input.setText(pathToVerify.getRankPointsFor().toString());
+            input.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) { }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    String editText = s.toString();
+                    String pointsString = editText.replaceFirst("^0*", "");
+                    pointsDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(editText.length() > 0);
+
+                    if(!pointsString.equals(editText))
+                    {
+                        input.setText(pointsString);
+                    }
+                }
+            });
+
             builder.setView(input);
+
             pointsDialog = builder.create();
         }
     }
