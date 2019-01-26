@@ -1,6 +1,7 @@
-package com.example.dantczak.got.Activities.ulozwedrowke;
+package com.example.dantczak.got.Activities.wedrowkawizard;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,8 +19,8 @@ import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.dantczak.got.DTO.ulozwedrowke.GrupaGorska;
-import com.example.dantczak.got.DTO.ulozwedrowke.PunktTrasyDTO;
+import com.example.dantczak.got.DTO.wedrowkawizard.GrupaGorska;
+import com.example.dantczak.got.DTO.wedrowkawizard.PunktTrasyLite;
 import com.example.dantczak.got.R;
 import com.example.dantczak.got.Utils.HttpUtils;
 import com.example.dantczak.got.Utils.JsonUtils;
@@ -34,10 +35,12 @@ public class ChoosePunktPoczatkowyActivity extends AppCompatActivity {
 
     private static String FETCH_GRUPY_URL = "/grupa/notempty";
     private static String FETCH_PUNKTY_URL = "/lite/punkt/poczatkowy/wgrupie?grupa=";
+    public static String INTENT_PUNKT_ID = "punktId";
 
     private SearchView searchView;
     private Spinner grupaGorskaSpinner;
     private RecyclerView punktyRecyclerView;
+    private String chosenNazwaGrupy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,11 +77,22 @@ public class ChoosePunktPoczatkowyActivity extends AppCompatActivity {
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, groupNames);
         grupaGorskaSpinner.setAdapter(dataAdapter);
     }
-    private void populatePunktyViewWithData(List<PunktTrasyDTO> punktyTrasy) {
+    private void populatePunktyViewWithData(List<PunktTrasyLite> punktyTrasy) {
 
         if (punktyRecyclerView.getAdapter()==null) {
-            PunktAdapter adapter = new PunktAdapter(punktyTrasy, this);
+            final PunktAdapter adapter = new PunktAdapter(punktyTrasy, this, new PunktAdapter.ClickListener() {
+                @Override
+                public void onItemClick(PunktTrasyLite punkt) {
+                    long punktId = punkt.getPunktId();
+                    Intent intent = new Intent(getApplicationContext(), ChooseOdcinekTrasyActivity.class);
+                    intent.putExtra(INTENT_PUNKT_ID, punktId);
+                    CreateWedrowkaSessionHolder.getInstance().createWedrowka();
+
+                    startActivity(intent);
+                }
+            });
             punktyRecyclerView.setAdapter(adapter);
+
         } else
         {
            PunktAdapter punktAdapter = (PunktAdapter) punktyRecyclerView.getAdapter();
@@ -93,8 +107,8 @@ public class ChoosePunktPoczatkowyActivity extends AppCompatActivity {
         grupaGorskaSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String nazwaGrupy =  (String) parent.getAdapter().getItem(position);
-                fetchPunktyInGrupa(nazwaGrupy);
+                chosenNazwaGrupy =  (String) parent.getAdapter().getItem(position);
+                fetchPunktyInGrupa(chosenNazwaGrupy);
             }
 
             @Override
@@ -113,7 +127,7 @@ public class ChoosePunktPoczatkowyActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
                     List<String> groupNames = new ArrayList<String>();
-                    List<GrupaGorska> result = JsonUtils.getObjectMapper().readValue(responseString, JsonUtils.getGenericListType(GrupaGorska.class));
+                    List<GrupaGorska> result = JsonUtils.getObjectMapper().readValue(responseString, JsonUtils.getListType(GrupaGorska.class));
                     for (GrupaGorska grupa : result )
                     {
                         groupNames.add(grupa.getNazwaGrupy());
@@ -137,7 +151,7 @@ public class ChoosePunktPoczatkowyActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
-                    List<PunktTrasyDTO> punktyTrasy = JsonUtils.getObjectMapper().readValue(responseString, JsonUtils.getGenericListType(PunktTrasyDTO.class));
+                    List<PunktTrasyLite> punktyTrasy = JsonUtils.getObjectMapper().readValue(responseString, JsonUtils.getListType(PunktTrasyLite.class));
                     populatePunktyViewWithData(punktyTrasy);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -152,13 +166,15 @@ public class ChoosePunktPoczatkowyActivity extends AppCompatActivity {
 
     static class PunktAdapter extends RecyclerView.Adapter<PunktAdapter.ViewHolder>
     {
-        private List<PunktTrasyDTO> punktyTrasy;
+        private List<PunktTrasyLite> punktyTrasy;
         private Context context;
+        private ClickListener clickListener;
 
-        public PunktAdapter(List<PunktTrasyDTO> punktyTrasy, Context context)
+        public PunktAdapter(List<PunktTrasyLite> punktyTrasy, Context context, ClickListener clickListener)
         {
             this.punktyTrasy = punktyTrasy;
             this.context = context;
+            this.clickListener = clickListener;
         }
 
         @NonNull
@@ -177,6 +193,7 @@ public class ChoosePunktPoczatkowyActivity extends AppCompatActivity {
             viewHolder.nazwaGrupy.setText(nazwaGrupy);
             String nazwaPunktu = punktyTrasy.get(position).getNazwaPunktu();
             viewHolder.nazwaPunktu.setText(nazwaPunktu);
+            viewHolder.setOnItemClickListener(clickListener);
         }
 
         @Override
@@ -192,20 +209,27 @@ public class ChoosePunktPoczatkowyActivity extends AppCompatActivity {
             }
         }
 
-        public List<PunktTrasyDTO> getPunktyTrasy() {
+        public PunktTrasyLite getPunktAtPos(int pos)
+        {
+            return punktyTrasy.get(pos);
+        }
+
+        public List<PunktTrasyLite> getPunktyTrasy() {
             return punktyTrasy;
         }
 
-        public void setPunktyTrasy(List<PunktTrasyDTO> punktyTrasy) {
+        public void setPunktyTrasy(List<PunktTrasyLite> punktyTrasy) {
             this.punktyTrasy = punktyTrasy;
         }
 
 
-        public class ViewHolder extends RecyclerView.ViewHolder
+
+        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
         {
             private TextView nazwaPunktu;
             private TextView nazwaGrupy;
             private LinearLayout punkty_row_ll;
+            private ClickListener clickListener;
 
             public ViewHolder(@NonNull View itemView)
             {
@@ -228,6 +252,21 @@ public class ChoosePunktPoczatkowyActivity extends AppCompatActivity {
                 return punkty_row_ll;
             }
 
+            @Override
+            public void onClick(View v) {
+                if (clickListener!=null)
+                clickListener.onItemClick(getPunktAtPos(getAdapterPosition()));
+            }
+
+            public void setOnItemClickListener(ClickListener clickListener)
+            {
+                this.clickListener = clickListener;
+                itemView.setOnClickListener(this);
+            }
+        }
+
+        public interface ClickListener {
+            void onItemClick(PunktTrasyLite punkt);
         }
     }
 

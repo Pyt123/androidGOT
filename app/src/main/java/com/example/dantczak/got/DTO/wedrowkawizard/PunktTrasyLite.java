@@ -1,17 +1,17 @@
-package com.example.dantczak.got.DTO.ulozwedrowke;
+package com.example.dantczak.got.DTO.wedrowkawizard;
 
-public class PunktTrasyDTO {
+public class PunktTrasyLite {
     private Long punktId;
     private String nazwaPunktu;
     private String nazwaGrupy;
 
-    public PunktTrasyDTO(Long punktId, String nazwaPunktu, String nazwaGrupy) {
+    public PunktTrasyLite(Long punktId, String nazwaPunktu, String nazwaGrupy) {
         this.punktId = punktId;
         this.nazwaPunktu = nazwaPunktu;
         this.nazwaGrupy = nazwaGrupy;
     }
 
-    public PunktTrasyDTO() {}
+    public PunktTrasyLite() {}
 
     public Long getPunktId() {
         return punktId;

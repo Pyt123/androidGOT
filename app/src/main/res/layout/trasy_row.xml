@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/trasy_row_ll"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/nazwa_trasy_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="top"
+        android:gravity="left"
+        android:text="TextView"
+        android:textSize="14sp" />
+    <TextView
+        android:id="@+id/nazwa_punkt_poczatkowy_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="top"
+        android:gravity="left"
+        android:text="TextView"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/nazwa_punkt_koncowy_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="top"
+        android:gravity="left"
+        android:text="TextView"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/liczba_punktow_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:layout_weight="1"
+        android:gravity="left"
+        android:text="TextView"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/dystans_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:layout_weight="1"
+        android:gravity="left"
+        android:text="TextView"
+        android:textSize="14sp" />
+</LinearLayout>

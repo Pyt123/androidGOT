@@ -1,4 +1,4 @@
-package com.example.dantczak.got.DTO.ulozwedrowke;
+package com.example.dantczak.got.DTO.wedrowkawizard;
 
 public class GrupaGorska {
     private Long id;
