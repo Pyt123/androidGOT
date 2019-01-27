@@ -116,7 +116,7 @@ public class MountainGroupActivity extends AppCompatActivity
     {
         TinyDb tinyDb = new TinyDb(this);
         ArrayList<Long> checked = new ArrayList<>(0);
-        try{ checked = tinyDb.getListLong(getResources().getString(R.string.ranking_mountain_group_ids)); }
+        try { checked = tinyDb.getListLong(getResources().getString(R.string.ranking_mountain_group_ids)); }
         catch (Exception e) { e.printStackTrace(); }
 
         RecyclerView recyclerView = findViewById(R.id.groups_view);
