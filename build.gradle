@@ -7,13 +7,16 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
-        classpath group: "org.sonarsource.scanner.gradle", name:"sonarqube-gradle-plugin", version:"2.5"
+        classpath 'com.android.tools.build:gradle:3.3.0'
+        classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6'
     }
 }
-
-group = 'com.test.sonarqube.gradle'
+plugins {
+    id "org.sonarqube" version "2.6"
+}
 apply plugin: "org.sonarqube"
+
+
 
 allprojects {
     repositories {
