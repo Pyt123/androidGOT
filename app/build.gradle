@@ -17,6 +17,13 @@ android {
         }
     }
 }
+subprojects{
+    sonarqube {
+        properties {
+            property 'sonar.projectName', "${-> project.name}"
+        }
+    }
+}
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')

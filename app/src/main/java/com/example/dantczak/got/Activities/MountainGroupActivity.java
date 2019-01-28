@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,6 @@ import com.example.dantczak.got.Utils.JsonUtils;
 import com.example.dantczak.got.Utils.ResponseHandlers.OnlySuccessMattersHandler;
 import com.example.dantczak.got.Utils.TinyDb;
 import com.fasterxml.jackson.databind.JavaType;
-import com.loopj.android.http.TextHttpResponseHandler;
 
 import java.util.ArrayList;
 

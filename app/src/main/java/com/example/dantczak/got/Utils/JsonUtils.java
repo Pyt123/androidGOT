@@ -41,7 +41,6 @@ public class JsonUtils
     public static JavaType getGenericListType(Class clazz)
     {
         return mapper.getTypeFactory().constructCollectionType(List.class, clazz);
-
     }
 
     /**
